@@ -1,1 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <meta name="theme-color" content="#07120d">
+
+    <title>Breakout — The Asian Boy</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+    <div class="game-page">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <button
+                class="back-button"
+                id="backButton"
+                aria-label="Go back"
+            >
+                ←
+            </button>
+
+
+            <div class="title">
+                BREAKOUT
+            </div>
+
+
+            <button
+                class="pause-button"
+                id="pauseButton"
+                aria-label="Pause game"
+            >
+                ❚❚
+            </button>
+
+        </header>
+
+
+        <!-- SCORE -->
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <span class="stat-label">
+                    SCORE
+                </span>
+
+                <span
+                    class="stat-value"
+                    id="score"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <span class="stat-label">
+                    LEVEL
+                </span>
+
+                <span
+                    class="stat-value"
+                    id="level"
+                >
+                    1
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <span class="stat-label">
+                    LIVES
+                </span>
+
+                <span
+                    class="stat-value"
+                    id="lives"
+                >
+                    3
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- GAME -->
+
+        <div class="game-wrapper">
+
+            <canvas id="gameCanvas"></canvas>
+
+
+            <!-- START OVERLAY -->
+
+            <div
+                class="overlay visible"
+                id="startOverlay"
+            >
+
+                <div class="overlay-content">
+
+                    <div class="overlay-title">
+                        BREAKOUT
+                    </div>
+
+                    <p>
+                        Break every brick.
+                        Don't let the ball fall.
+                    </p>
+
+                    <button
+                        class="main-button"
+                        id="startButton"
+                    >
+                        PLAY
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAUSE OVERLAY -->
+
+            <div
+                class="overlay"
+                id="pauseOverlay"
+            >
+
+                <div class="overlay-content">
+
+                    <div class="overlay-title">
+                        PAUSED
+                    </div>
+
+                    <button
+                        class="main-button"
+                        id="resumeButton"
+                    >
+                        RESUME
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- GAME OVER -->
+
+            <div
+                class="overlay"
+                id="gameOverOverlay"
+            >
+
+                <div class="overlay-content">
+
+                    <div class="overlay-title">
+                        GAME OVER
+                    </div>
+
+                    <p>
+                        Score:
+                        <strong id="finalScore">
+                            0
+                        </strong>
+                    </p>
+
+                    <button
+                        class="main-button"
+                        id="restartButton"
+                    >
+                        PLAY AGAIN
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- LEVEL COMPLETE -->
+
+            <div
+                class="overlay"
+                id="levelOverlay"
+            >
+
+                <div class="overlay-content">
+
+                    <div class="overlay-title">
+                        LEVEL CLEAR
+                    </div>
+
+                    <p>
+                        Get ready for the next level.
+                    </p>
+
+                    <button
+                        class="main-button"
+                        id="nextLevelButton"
+                    >
+                        NEXT LEVEL
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <p class="hint">
+            Drag anywhere horizontally to move
+        </p>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
