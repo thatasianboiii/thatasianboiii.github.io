@@ -7,6 +7,7 @@ html,
 body {
     width: 100%;
     height: 100%;
+
     margin: 0;
     padding: 0;
 
@@ -15,31 +16,33 @@ body {
     background: #06100b;
     color: #edf7ef;
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
 body {
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 button {
     border: 0;
     font: inherit;
-    user-select: none;
 }
 
 
-/* ================================
-   MAIN APP
-================================ */
+/* =====================================
+   APP
+===================================== */
 
 .game {
+
     width: 100%;
     max-width: 700px;
 
-    height: 100vh;
+    height: 100%;
     height: 100dvh;
 
     display: flex;
@@ -50,20 +53,20 @@ button {
     background:
         radial-gradient(
             circle at 50% 20%,
-            rgba(69, 130, 82, 0.16),
-            transparent 48%
+            rgba(69, 130, 82, 0.15),
+            transparent 50%
         ),
         #08140d;
 }
 
 
-/* ================================
+/* =====================================
    HEADER
-================================ */
+===================================== */
 
 .topbar {
-    width: 100%;
 
+    width: 100%;
     height: 52px;
     min-height: 52px;
 
@@ -74,18 +77,19 @@ button {
     padding: 0 10px;
 
     background:
-        rgba(5, 15, 9, 0.94);
+        rgba(5, 15, 9, 0.95);
 
     border-bottom:
         1px solid
         rgba(160, 215, 175, 0.12);
 
-    z-index: 20;
+    flex-shrink: 0;
 }
 
 .top-button {
-    min-width: 42px;
+
     height: 34px;
+    min-width: 42px;
 
     padding: 0 10px;
 
@@ -113,6 +117,7 @@ button {
 }
 
 .title {
+
     font-size: 13px;
 
     font-weight: 900;
@@ -121,19 +126,22 @@ button {
 }
 
 
-/* ================================
+/* =====================================
    GAME AREA
-================================ */
 
-.game-container {
+   THIS IS ONLY FOR THE BOARD.
+===================================== */
+
+.game-area {
+
     width: 100%;
 
     /*
-       Leave a fixed amount of space
-       for the controls below.
+       Take all available space between
+       the header and controls.
     */
 
-    height: calc(100dvh - 190px);
+    flex: 1;
 
     min-height: 0;
 
@@ -145,16 +153,15 @@ button {
     padding: 8px;
 
     overflow: hidden;
-
-    touch-action: none;
 }
 
 
-/* ================================
+/* =====================================
    BOARD + INFO
-================================ */
+===================================== */
 
 .game-layout {
+
     width: 100%;
     height: 100%;
 
@@ -163,35 +170,48 @@ button {
     justify-content: center;
     align-items: center;
 
-    gap: 9px;
+    gap: 10px;
 
     overflow: hidden;
 }
 
 
-/* ================================
+/* =====================================
    TETRIS BOARD
-================================ */
+===================================== */
 
 .board-container {
 
     /*
-       SMALLER BOARD
+       IMPORTANT:
 
-       Previous versions allowed this
-       to become almost full-screen.
-
-       This one deliberately limits it.
+       Width and height are calculated
+       together so the board always
+       remains 1:2.
     */
 
+    width: min(
+        46vw,
+        250px
+    );
+
     height: min(
-        70vh,
+        92%,
         500px
     );
 
-    width: auto;
+    /*
+       Force the actual Tetris ratio.
+    */
 
     aspect-ratio: 1 / 2;
+
+    /*
+       If height is limiting, width follows.
+    */
+
+    max-width: 250px;
+    max-height: 500px;
 
     flex-shrink: 1;
 
@@ -199,7 +219,7 @@ button {
 
     overflow: hidden;
 
-    border-radius: 9px;
+    border-radius: 10px;
 
     background: #06100b;
 
@@ -208,11 +228,12 @@ button {
         rgba(180, 220, 185, 0.15);
 
     box-shadow:
-        0 15px 40px
-        rgba(0, 0, 0, 0.35);
+        0 15px 45px
+        rgba(0, 0, 0, 0.4);
 }
 
 #gameCanvas {
+
     display: block;
 
     width: 100%;
@@ -220,23 +241,25 @@ button {
 }
 
 
-/* ================================
-   SIDE PANEL
-================================ */
+/* =====================================
+   INFORMATION PANEL
+===================================== */
 
 .info {
+
     width: 70px;
+
+    flex-shrink: 0;
 
     display: flex;
     flex-direction: column;
 
     gap: 6px;
-
-    flex-shrink: 0;
 }
 
 .stat,
 .preview {
+
     width: 100%;
 
     padding: 7px;
@@ -255,9 +278,10 @@ button {
 
 .stat span,
 .preview span {
+
     display: block;
 
-    margin-bottom: 2px;
+    margin-bottom: 3px;
 
     color: #78927e;
 
@@ -273,6 +297,7 @@ button {
 }
 
 .preview canvas {
+
     display: block;
 
     width: 55px;
@@ -281,134 +306,42 @@ button {
     margin: auto;
 }
 
-.hold {
+.hold-preview {
     margin-top: auto;
 }
 
 
-/* ================================
-   OVERLAYS
-================================ */
-
-.overlay {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 50;
-
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    padding: 15px;
-
-    background:
-        rgba(2, 8, 5, 0.68);
-
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-.hidden {
-    display: none;
-}
-
-.overlay-box {
-    width: 100%;
-
-    padding: 22px 15px;
-
-    text-align: center;
-
-    border-radius: 15px;
-
-    background:
-        rgba(15, 35, 21, 0.97);
-
-    border:
-        1px solid
-        rgba(170, 220, 180, 0.15);
-}
-
-.overlay-box h2 {
-    margin:
-        0 0 18px;
-
-    font-size: 20px;
-
-    letter-spacing: 1.5px;
-}
-
-.result {
-    display: flex;
-
-    justify-content: space-between;
-
-    margin-bottom: 9px;
-
-    color: #829c88;
-
-    font-size: 9px;
-
-    font-weight: 800;
-}
-
-.result strong {
-    color: #edf7ef;
-
-    font-size: 18px;
-}
-
-.main-button {
-    width: 100%;
-
-    min-height: 43px;
-
-    margin-top: 8px;
-
-    border-radius: 11px;
-
-    background: #a9d5b1;
-
-    color: #081b0d;
-
-    font-weight: 900;
-}
-
-
-/* ================================
+/* =====================================
    CONTROLS
-================================ */
+
+   COMPLETELY OUTSIDE GAME AREA.
+===================================== */
 
 .controls {
 
-    /*
-       Controls have their own fixed area.
-    */
-
     width: 100%;
 
-    height: 112px;
-    min-height: 112px;
+    height: 96px;
+    min-height: 96px;
+
+    flex-shrink: 0;
 
     display: flex;
-
     flex-direction: column;
 
     justify-content: center;
-
     align-items: center;
 
     gap: 6px;
 
     padding: 4px 8px;
 
-    z-index: 100;
+    background:
+        rgba(5, 15, 9, 0.25);
 }
 
 .control-row {
+
     display: flex;
 
     justify-content: center;
@@ -417,10 +350,15 @@ button {
 }
 
 .control {
+
     width: 72px;
-    height: 40px;
+    height: 38px;
+
+    flex-shrink: 0;
 
     border-radius: 11px;
+
+    color: #d0e8d5;
 
     background:
         rgba(91, 150, 105, 0.14);
@@ -429,56 +367,51 @@ button {
         1px solid
         rgba(160, 215, 175, 0.12);
 
-    color: #d0e8d5;
-
     font-size: 21px;
-
     font-weight: 800;
 
     touch-action: manipulation;
-
-    transition:
-        transform 0.08s ease,
-        background 0.08s ease;
 }
 
 .control:active {
+
     transform: scale(0.91);
 
     background:
         rgba(120, 190, 135, 0.25);
 }
 
-.rotate {
-    font-size: 26px;
-}
-
 .small {
+
     font-size: 8px;
 
     letter-spacing: 1px;
 }
 
 .drop {
+
     background:
         rgba(160, 210, 170, 0.18);
 }
 
 
-/* ================================
+/* =====================================
    HINT
-================================ */
+===================================== */
 
 .hint {
+
     width: 100%;
 
-    height: 20px;
-    min-height: 20px;
+    height: 18px;
+    min-height: 18px;
+
+    flex-shrink: 0;
 
     display: flex;
 
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
     color:
         rgba(180, 210, 185, 0.32);
@@ -491,9 +424,9 @@ button {
 }
 
 
-/* ================================
-   SHORT PHONES
-================================ */
+/* =====================================
+   SHORT PHONE
+===================================== */
 
 @media (max-height: 700px) {
 
@@ -502,49 +435,47 @@ button {
         min-height: 48px;
     }
 
-    .game-container {
-        height: calc(100dvh - 174px);
-
+    .game-area {
         padding: 5px;
     }
 
     .board-container {
-        height: min(
-            62vh,
-            420px
+
+        width: min(
+            42vw,
+            210px
         );
+
+        height: 90%;
+
+        max-height: 390px;
     }
 
     .controls {
-        height: 106px;
-        min-height: 106px;
+
+        height: 88px;
+        min-height: 88px;
 
         gap: 4px;
     }
 
     .control {
+
         width: 65px;
-        height: 35px;
+        height: 34px;
 
         font-size: 18px;
     }
 
-    .rotate {
-        font-size: 22px;
-    }
-
     .hint {
-        height: 20px;
-        min-height: 20px;
-
         display: none;
     }
 }
 
 
-/* ================================
-   VERY SHORT PHONES
-================================ */
+/* =====================================
+   VERY SHORT PHONE
+===================================== */
 
 @media (max-height: 580px) {
 
@@ -553,15 +484,16 @@ button {
         min-height: 44px;
     }
 
-    .game-container {
-        height: calc(100dvh - 150px);
-    }
-
     .board-container {
-        height: min(
-            55vh,
-            330px
+
+        width: min(
+            38vw,
+            175px
         );
+
+        height: 88%;
+
+        max-height: 320px;
     }
 
     .info {
@@ -583,28 +515,36 @@ button {
     }
 
     .controls {
-        height: 100px;
-        min-height: 100px;
+
+        height: 78px;
+        min-height: 78px;
     }
 
     .control {
-        width: 60px;
-        height: 30px;
+
+        width: 58px;
+        height: 29px;
 
         font-size: 17px;
-    }
-
-    .rotate {
-        font-size: 21px;
     }
 }
 
 
-/* ================================
+/* =====================================
    WIDER PHONES
-================================ */
+===================================== */
 
 @media (min-width: 430px) {
+
+    .board-container {
+
+        width: min(
+            48vw,
+            260px
+        );
+
+        max-width: 260px;
+    }
 
     .info {
         width: 76px;
