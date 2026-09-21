@@ -8,7 +8,6 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
-
     overflow: hidden;
 
     background: #06100b;
@@ -39,7 +38,7 @@ button {
 
 .game {
     width: 100%;
-    height: 100%;
+    height: 100dvh;
 
     max-width: 700px;
 
@@ -48,7 +47,7 @@ button {
 
     background:
         radial-gradient(
-            circle at 50% 25%,
+            circle at 50% 20%,
             rgba(69, 130, 82, 0.16),
             transparent 48%
         ),
@@ -61,32 +60,32 @@ button {
 ========================= */
 
 .topbar {
-    height: 58px;
-    min-height: 58px;
+    height: 52px;
+    min-height: 52px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    padding: 0 12px;
+    padding: 0 10px;
 
     border-bottom:
         1px solid
         rgba(160, 215, 175, 0.12);
 
     background:
-        rgba(5, 15, 9, 0.9);
+        rgba(5, 15, 9, 0.92);
 
     z-index: 20;
 }
 
 .top-button {
     min-width: 42px;
-    height: 38px;
+    height: 34px;
 
-    padding: 0 12px;
+    padding: 0 10px;
 
-    border-radius: 11px;
+    border-radius: 10px;
 
     color: #cde5d2;
 
@@ -97,7 +96,7 @@ button {
         1px solid
         rgba(160, 220, 175, 0.12);
 
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
 }
 
@@ -106,7 +105,7 @@ button {
 }
 
 .pause {
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .title {
@@ -127,26 +126,39 @@ button {
 
     min-height: 0;
 
+    width: 100%;
+
     display: flex;
     flex-direction: column;
 
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
     padding:
+        6px
         8px
-        10px
-        10px;
+        8px;
+
+    gap: 6px;
 
     touch-action: none;
 }
 
 
 /* =========================
-   GAME LAYOUT
+   BOARD + INFO
 ========================= */
 
 .game-layout {
+    /*
+       IMPORTANT:
+       The layout is now explicitly
+       constrained by the available
+       viewport height.
+    */
+
+    width: 100%;
+
     flex: 1;
 
     min-height: 0;
@@ -154,9 +166,9 @@ button {
     display: flex;
 
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
 
-    gap: 10px;
+    gap: 8px;
 }
 
 
@@ -165,18 +177,27 @@ button {
 ========================= */
 
 .board-container {
+
     position: relative;
+
+    /*
+       Instead of letting the board
+       consume unlimited height,
+       calculate its maximum size
+       from the viewport.
+    */
 
     height:
         min(
-            calc(100vh - 180px),
-            650px
+            calc(100dvh - 245px),
+            600px
         );
+
+    width: auto;
 
     aspect-ratio: 1 / 2;
 
-    max-width:
-        calc(100vw - 105px);
+    flex-shrink: 1;
 
     overflow: hidden;
 
@@ -202,27 +223,29 @@ button {
 
 
 /* =========================
-   INFORMATION
+   INFORMATION PANEL
 ========================= */
 
 .info {
-    width: 78px;
+    width: 72px;
+
+    flex-shrink: 0;
 
     display: flex;
     flex-direction: column;
 
-    gap: 7px;
+    gap: 6px;
 }
 
 .stat,
 .preview {
     width: 100%;
 
-    padding: 8px;
+    padding: 7px;
 
     text-align: center;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
     background:
         rgba(17, 40, 24, 0.72);
@@ -236,24 +259,24 @@ button {
 .preview span {
     display: block;
 
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 
     color: #78927e;
 
-    font-size: 8px;
+    font-size: 7px;
 
     font-weight: 800;
 
-    letter-spacing: 1.2px;
+    letter-spacing: 1px;
 }
 
 .stat strong {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .preview canvas {
-    width: 62px;
-    height: 52px;
+    width: 58px;
+    height: 45px;
 
     display: block;
 
@@ -284,7 +307,7 @@ button {
     padding: 15px;
 
     background:
-        rgba(2, 8, 5, 0.65);
+        rgba(2, 8, 5, 0.68);
 
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
@@ -371,14 +394,22 @@ button {
 ========================= */
 
 .controls {
+    /*
+       Controls are now outside the
+       flexible board area and therefore
+       cannot be hidden underneath it.
+    */
+
     width: 100%;
 
-    max-width: 420px;
+    flex-shrink: 0;
+
+    max-width: 390px;
 
     display: flex;
     flex-direction: column;
 
-    gap: 6px;
+    gap: 5px;
 }
 
 .control-row {
@@ -386,14 +417,16 @@ button {
 
     justify-content: center;
 
-    gap: 7px;
+    gap: 6px;
 }
 
 .control {
-    width: 74px;
-    height: 42px;
+    width: 72px;
+    height: 38px;
 
-    border-radius: 12px;
+    flex-shrink: 0;
+
+    border-radius: 11px;
 
     background:
         rgba(91, 150, 105, 0.14);
@@ -404,7 +437,7 @@ button {
 
     color: #d0e8d5;
 
-    font-size: 22px;
+    font-size: 21px;
 
     font-weight: 800;
 
@@ -423,11 +456,11 @@ button {
 }
 
 .rotate {
-    font-size: 27px;
+    font-size: 26px;
 }
 
 .small {
-    font-size: 9px;
+    font-size: 8px;
 
     letter-spacing: 1px;
 }
@@ -437,36 +470,63 @@ button {
         rgba(160, 210, 170, 0.18);
 }
 
+
+/* =========================
+   HINT
+========================= */
+
 .hint {
-    margin-top: 5px;
+    flex-shrink: 0;
+
+    margin-top: 1px;
 
     color:
         rgba(180, 210, 185, 0.32);
 
-    font-size: 8px;
+    font-size: 7px;
 
     font-weight: 800;
 
-    letter-spacing: 1.4px;
+    letter-spacing: 1.3px;
 }
 
 
 /* =========================
-   SMALL SCREENS
+   SHORT PHONES
 ========================= */
 
-@media (max-height: 650px) {
+@media (max-height: 700px) {
+
+    .topbar {
+        height: 48px;
+        min-height: 48px;
+    }
 
     .game-container {
         padding-top: 4px;
+        padding-bottom: 5px;
+
+        gap: 4px;
+    }
+
+    .board-container {
+        height:
+            min(
+                calc(100dvh - 210px),
+                500px
+            );
     }
 
     .control {
-        height: 36px;
+        height: 34px;
     }
 
     .controls {
-        gap: 4px;
+        gap: 3px;
+    }
+
+    .control-row {
+        gap: 5px;
     }
 
     .hint {
@@ -476,16 +536,74 @@ button {
 
 
 /* =========================
-   LARGER PHONES / TABLETS
+   VERY SHORT PHONES
 ========================= */
 
-@media (min-width: 600px) {
+@media (max-height: 580px) {
 
     .topbar {
-        height: 64px;
+        height: 44px;
+        min-height: 44px;
     }
 
-    .title {
-        font-size: 14px;
+    .board-container {
+        height:
+            min(
+                calc(100dvh - 180px),
+                400px
+            );
+    }
+
+    .info {
+        width: 62px;
+    }
+
+    .stat,
+    .preview {
+        padding: 5px;
+    }
+
+    .stat strong {
+        font-size: 12px;
+    }
+
+    .preview canvas {
+        width: 50px;
+        height: 38px;
+    }
+
+    .control {
+        width: 65px;
+        height: 31px;
+
+        font-size: 18px;
+    }
+
+    .rotate {
+        font-size: 22px;
+    }
+}
+
+
+/* =========================
+   WIDER PHONES
+========================= */
+
+@media (min-width: 430px) {
+
+    .board-container {
+        height:
+            min(
+                calc(100dvh - 245px),
+                620px
+            );
+    }
+
+    .info {
+        width: 78px;
+    }
+
+    .control {
+        width: 76px;
     }
 }
