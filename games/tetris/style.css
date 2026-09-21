@@ -8,15 +8,14 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
+    padding: 0;
+
     overflow: hidden;
 
     background: #06100b;
     color: #edf7ef;
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -32,18 +31,33 @@ button {
 }
 
 
-/* =========================
-   MAIN
-========================= */
+/* =========================================
+   APP
+========================================= */
 
 .game {
     width: 100%;
-    height: 100dvh;
-
     max-width: 700px;
 
-    display: flex;
-    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+
+    display: grid;
+
+    /*
+       row 1 = header
+       row 2 = board area
+       row 3 = controls
+       row 4 = hint
+    */
+
+    grid-template-rows:
+        52px
+        minmax(0, 1fr)
+        auto
+        16px;
+
+    overflow: hidden;
 
     background:
         radial-gradient(
@@ -55,13 +69,13 @@ button {
 }
 
 
-/* =========================
-   TOP BAR
-========================= */
+/* =========================================
+   HEADER
+========================================= */
 
 .topbar {
+    width: 100%;
     height: 52px;
-    min-height: 52px;
 
     display: flex;
     align-items: center;
@@ -69,12 +83,12 @@ button {
 
     padding: 0 10px;
 
+    background:
+        rgba(5, 15, 9, 0.94);
+
     border-bottom:
         1px solid
         rgba(160, 215, 175, 0.12);
-
-    background:
-        rgba(5, 15, 9, 0.92);
 
     z-index: 20;
 }
@@ -117,50 +131,46 @@ button {
 }
 
 
-/* =========================
-   GAME AREA
-========================= */
+/* =========================================
+   BOARD AREA
+========================================= */
 
 .game-container {
-    flex: 1;
+    /*
+       THIS ROW BELONGS ONLY TO THE BOARD.
+
+       The controls cannot enter this area
+       and the board cannot leave this area.
+    */
 
     min-height: 0;
 
     width: 100%;
 
     display: flex;
-    flex-direction: column;
 
-    align-items: center;
     justify-content: center;
+    align-items: center;
 
     padding:
         6px
-        8px
         8px;
 
-    gap: 6px;
+    overflow: hidden;
 
     touch-action: none;
 }
 
 
-/* =========================
+/* =========================================
    BOARD + INFO
-========================= */
+========================================= */
 
 .game-layout {
-    /*
-       IMPORTANT:
-       The layout is now explicitly
-       constrained by the available
-       viewport height.
-    */
-
     width: 100%;
+    height: 100%;
 
-    flex: 1;
-
+    min-width: 0;
     min-height: 0;
 
     display: flex;
@@ -169,35 +179,35 @@ button {
     align-items: center;
 
     gap: 8px;
+
+    overflow: hidden;
 }
 
 
-/* =========================
-   BOARD
-========================= */
+/* =========================================
+   TETRIS BOARD
+========================================= */
 
 .board-container {
 
-    position: relative;
-
     /*
-       Instead of letting the board
-       consume unlimited height,
-       calculate its maximum size
-       from the viewport.
+       The board can NEVER become taller than
+       the area allocated to it.
     */
 
-    height:
-        min(
-            calc(100dvh - 245px),
-            600px
-        );
+    height: 100%;
+    max-height: 100%;
+
+    /*
+       Width follows the 1:2 Tetris ratio.
+    */
 
     width: auto;
-
     aspect-ratio: 1 / 2;
 
     flex-shrink: 1;
+
+    position: relative;
 
     overflow: hidden;
 
@@ -222,12 +232,14 @@ button {
 }
 
 
-/* =========================
-   INFORMATION PANEL
-========================= */
+/* =========================================
+   SIDE INFO
+========================================= */
 
 .info {
     width: 72px;
+
+    max-height: 100%;
 
     flex-shrink: 0;
 
@@ -235,6 +247,8 @@ button {
     flex-direction: column;
 
     gap: 6px;
+
+    overflow: hidden;
 }
 
 .stat,
@@ -288,9 +302,9 @@ button {
 }
 
 
-/* =========================
+/* =========================================
    OVERLAYS
-========================= */
+========================================= */
 
 .overlay {
     position: absolute;
@@ -389,27 +403,37 @@ button {
 }
 
 
-/* =========================
+/* =========================================
    CONTROLS
-========================= */
+========================================= */
 
 .controls {
     /*
-       Controls are now outside the
-       flexible board area and therefore
-       cannot be hidden underneath it.
+       This is now a completely separate
+       grid row.
+
+       The board physically cannot overlap it.
     */
 
     width: 100%;
 
-    flex-shrink: 0;
+    min-height: 0;
 
-    max-width: 390px;
+    flex-shrink: 0;
 
     display: flex;
     flex-direction: column;
 
+    justify-content: center;
+
     gap: 5px;
+
+    padding:
+        2px
+        8px
+        3px;
+
+    z-index: 100;
 }
 
 .control-row {
@@ -471,14 +495,17 @@ button {
 }
 
 
-/* =========================
+/* =========================================
    HINT
-========================= */
+========================================= */
 
 .hint {
-    flex-shrink: 0;
+    width: 100%;
+    height: 16px;
 
-    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     color:
         rgba(180, 210, 185, 0.32);
@@ -491,42 +518,52 @@ button {
 }
 
 
-/* =========================
+/* =========================================
    SHORT PHONES
-========================= */
+========================================= */
 
 @media (max-height: 700px) {
 
+    .game {
+        grid-template-rows:
+            48px
+            minmax(0, 1fr)
+            auto
+            4px;
+    }
+
     .topbar {
         height: 48px;
-        min-height: 48px;
     }
 
     .game-container {
-        padding-top: 4px;
-        padding-bottom: 5px;
-
-        gap: 4px;
-    }
-
-    .board-container {
-        height:
-            min(
-                calc(100dvh - 210px),
-                500px
-            );
-    }
-
-    .control {
-        height: 34px;
+        padding:
+            4px
+            6px;
     }
 
     .controls {
         gap: 3px;
+
+        padding:
+            1px
+            6px
+            2px;
     }
 
     .control-row {
         gap: 5px;
+    }
+
+    .control {
+        width: 65px;
+        height: 32px;
+
+        font-size: 18px;
+    }
+
+    .rotate {
+        font-size: 22px;
     }
 
     .hint {
@@ -535,27 +572,52 @@ button {
 }
 
 
-/* =========================
+/* =========================================
    VERY SHORT PHONES
-========================= */
+========================================= */
 
 @media (max-height: 580px) {
 
-    .topbar {
-        height: 44px;
-        min-height: 44px;
+    .game {
+        grid-template-rows:
+            44px
+            minmax(0, 1fr)
+            auto
+            0;
     }
 
-    .board-container {
-        height:
-            min(
-                calc(100dvh - 180px),
-                400px
-            );
+    .topbar {
+        height: 44px;
+    }
+
+    .game-container {
+        padding:
+            2px
+            5px;
+    }
+
+    .controls {
+        gap: 2px;
+
+        padding:
+            1px
+            5px
+            1px;
+    }
+
+    .control {
+        width: 60px;
+        height: 29px;
+
+        font-size: 17px;
+    }
+
+    .rotate {
+        font-size: 21px;
     }
 
     .info {
-        width: 62px;
+        width: 60px;
     }
 
     .stat,
@@ -568,36 +630,17 @@ button {
     }
 
     .preview canvas {
-        width: 50px;
-        height: 38px;
-    }
-
-    .control {
-        width: 65px;
-        height: 31px;
-
-        font-size: 18px;
-    }
-
-    .rotate {
-        font-size: 22px;
+        width: 48px;
+        height: 36px;
     }
 }
 
 
-/* =========================
+/* =========================================
    WIDER PHONES
-========================= */
+========================================= */
 
 @media (min-width: 430px) {
-
-    .board-container {
-        height:
-            min(
-                calc(100dvh - 245px),
-                620px
-            );
-    }
 
     .info {
         width: 78px;
