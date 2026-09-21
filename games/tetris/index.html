@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
 
@@ -8,7 +9,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
-    <meta name="theme-color" content="#07120c">
+    <meta name="theme-color" content="#06100b">
 
     <title>Tetris — The Asian Boy</title>
 
@@ -17,161 +18,213 @@
 
 <body>
 
-    <main class="game">
+<div class="game">
 
-        <header class="topbar">
+    <!-- HEADER -->
 
-            <button id="homeBtn" class="top-button">
-                ← Home
-            </button>
+    <header class="topbar">
 
-            <div class="title">
-                TETRIS
-            </div>
+        <button id="homeBtn" class="top-button">
+            ← Home
+        </button>
 
-            <button id="pauseBtn" class="top-button pause">
-                Ⅱ
-            </button>
+        <div class="title">
+            TETRIS
+        </div>
 
-        </header>
+        <button id="pauseBtn" class="top-button pause">
+            Ⅱ
+        </button>
+
+    </header>
 
 
-        <section class="game-container">
+    <!-- MAIN GAME -->
 
-            <div class="game-layout">
+    <main class="game-area">
 
-                <div class="board-container">
+        <div class="game-layout">
 
-                    <canvas id="gameCanvas"></canvas>
+            <!-- TETRIS BOARD -->
 
-                    <div id="pauseOverlay" class="overlay hidden">
-                        <div class="overlay-box">
-                            <h2>PAUSED</h2>
+            <div class="board-container">
 
-                            <button id="resumeBtn" class="main-button">
-                                RESUME
-                            </button>
+                <canvas id="gameCanvas"></canvas>
+
+
+                <!-- PAUSE -->
+
+                <div
+                    id="pauseOverlay"
+                    class="overlay hidden"
+                >
+
+                    <div class="overlay-box">
+
+                        <h2>PAUSED</h2>
+
+                        <button
+                            id="resumeBtn"
+                            class="main-button"
+                        >
+                            RESUME
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- GAME OVER -->
+
+                <div
+                    id="gameOverOverlay"
+                    class="overlay hidden"
+                >
+
+                    <div class="overlay-box">
+
+                        <h2>GAME OVER</h2>
+
+                        <div class="result">
+                            <span>SCORE</span>
+                            <strong id="finalScore">0</strong>
                         </div>
-                    </div>
 
-
-                    <div id="gameOverOverlay" class="overlay hidden">
-
-                        <div class="overlay-box">
-
-                            <h2>GAME OVER</h2>
-
-                            <div class="result">
-                                <span>SCORE</span>
-                                <strong id="finalScore">0</strong>
-                            </div>
-
-                            <div class="result">
-                                <span>BEST</span>
-                                <strong id="finalBest">0</strong>
-                            </div>
-
-                            <button id="restartBtn" class="main-button">
-                                PLAY AGAIN
-                            </button>
-
+                        <div class="result">
+                            <span>BEST</span>
+                            <strong id="finalBest">0</strong>
                         </div>
 
-                    </div>
-
-                </div>
-
-
-                <aside class="info">
-
-                    <div class="stat">
-                        <span>SCORE</span>
-                        <strong id="score">0</strong>
-                    </div>
-
-                    <div class="stat">
-                        <span>BEST</span>
-                        <strong id="best">0</strong>
-                    </div>
-
-                    <div class="stat">
-                        <span>LINES</span>
-                        <strong id="lines">0</strong>
-                    </div>
-
-                    <div class="stat">
-                        <span>LEVEL</span>
-                        <strong id="level">1</strong>
-                    </div>
-
-                    <div class="preview">
-
-                        <span>NEXT</span>
-
-                        <canvas id="nextCanvas"></canvas>
+                        <button
+                            id="restartBtn"
+                            class="main-button"
+                        >
+                            PLAY AGAIN
+                        </button>
 
                     </div>
-
-                    <div class="preview hold">
-
-                        <span>HOLD</span>
-
-                        <canvas id="holdCanvas"></canvas>
-
-                    </div>
-
-                </aside>
-
-            </div>
-
-
-            <div class="controls">
-
-                <div class="control-row">
-
-                    <button id="leftBtn" class="control">
-                        ←
-                    </button>
-
-                    <button id="rotateBtn" class="control rotate">
-                        ↻
-                    </button>
-
-                    <button id="rightBtn" class="control">
-                        →
-                    </button>
-
-                </div>
-
-
-                <div class="control-row">
-
-                    <button id="holdBtn" class="control small">
-                        HOLD
-                    </button>
-
-                    <button id="dropBtn" class="control drop">
-                        DROP
-                    </button>
-
-                    <button id="downBtn" class="control">
-                        ↓
-                    </button>
 
                 </div>
 
             </div>
 
 
-            <div class="hint">
-                SWIPE • TAP • HOLD
-            </div>
+            <!-- INFORMATION -->
 
-        </section>
+            <aside class="info">
+
+                <div class="stat">
+                    <span>SCORE</span>
+                    <strong id="score">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>BEST</span>
+                    <strong id="best">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>LINES</span>
+                    <strong id="lines">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>LEVEL</span>
+                    <strong id="level">1</strong>
+                </div>
+
+
+                <div class="preview">
+
+                    <span>NEXT</span>
+
+                    <canvas id="nextCanvas"></canvas>
+
+                </div>
+
+
+                <div class="preview hold-preview">
+
+                    <span>HOLD</span>
+
+                    <canvas id="holdCanvas"></canvas>
+
+                </div>
+
+            </aside>
+
+        </div>
 
     </main>
 
-    <script src="script.js"></script>
+
+    <!-- CONTROLS -->
+
+    <section class="controls">
+
+        <div class="control-row">
+
+            <button
+                id="leftBtn"
+                class="control"
+            >
+                ←
+            </button>
+
+            <button
+                id="rotateBtn"
+                class="control"
+            >
+                ↻
+            </button>
+
+            <button
+                id="rightBtn"
+                class="control"
+            >
+                →
+            </button>
+
+        </div>
+
+
+        <div class="control-row">
+
+            <button
+                id="holdBtn"
+                class="control small"
+            >
+                HOLD
+            </button>
+
+            <button
+                id="dropBtn"
+                class="control drop"
+            >
+                DROP
+            </button>
+
+            <button
+                id="downBtn"
+                class="control"
+            >
+                ↓
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <div class="hint">
+        SWIPE • TAP • HOLD
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
