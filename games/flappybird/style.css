@@ -1,0 +1,459 @@
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    background: #06100c;
+    color: #e9f5ed;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    font: inherit;
+    border: 0;
+    cursor: pointer;
+}
+
+.game-shell {
+    width: 100%;
+    height: 100%;
+
+    max-width: 700px;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #08140f;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.top-bar {
+    height: 58px;
+    min-height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 12px;
+
+    background: rgba(7, 20, 14, 0.96);
+
+    border-bottom:
+        1px solid rgba(140, 220, 165, 0.12);
+
+    z-index: 20;
+}
+
+.back-btn,
+.pause-btn {
+    height: 38px;
+    min-width: 42px;
+
+    padding: 0 12px;
+
+    border-radius: 11px;
+
+    background:
+        rgba(112, 177, 133, 0.09);
+
+    border:
+        1px solid rgba(145, 220, 168, 0.12);
+
+    color: #cce8d4;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: 0.15s ease;
+}
+
+.pause-btn {
+    font-size: 16px;
+}
+
+.back-btn:active,
+.pause-btn:active {
+    transform: scale(0.93);
+
+    background:
+        rgba(112, 177, 133, 0.18);
+}
+
+.game-title {
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    color: #dceee2;
+}
+
+
+/* =========================
+   GAME AREA
+========================= */
+
+.game-area {
+    position: relative;
+
+    flex: 1;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    touch-action: none;
+
+    user-select: none;
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(68, 126, 86, 0.2),
+            transparent 45%
+        ),
+        #0b1b13;
+}
+
+canvas {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+}
+
+
+/* =========================
+   SCORE
+========================= */
+
+.score-display {
+    position: absolute;
+
+    top: 22px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 5;
+
+    font-size: 44px;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    color: #f0f7f2;
+
+    text-shadow:
+        0 3px 0 rgba(0, 0, 0, 0.25),
+        0 6px 20px rgba(0, 0, 0, 0.35);
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   OVERLAYS
+========================= */
+
+.overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 10;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+        rgba(3, 10, 7, 0.32);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    opacity: 1;
+
+    transition:
+        opacity 0.2s ease;
+}
+
+.overlay.hidden {
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   PANEL
+========================= */
+
+.panel {
+    width: min(330px, 90%);
+
+    padding: 30px 24px 24px;
+
+    text-align: center;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24, 52, 35, 0.96),
+            rgba(10, 27, 18, 0.97)
+        );
+
+    border:
+        1px solid rgba(165, 222, 180, 0.14);
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.panel h1 {
+    margin: 4px 0 8px;
+
+    font-size: 25px;
+
+    letter-spacing: 2px;
+}
+
+.panel p {
+    margin: 0 0 24px;
+
+    color: #9dbbaa;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   BIRD ICON
+========================= */
+
+.bird-icon {
+    width: 60px;
+    height: 44px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #d9c65b;
+
+    color: #5c4e0d;
+
+    font-size: 26px;
+
+    box-shadow:
+        0 8px 25px rgba(217, 198, 91, 0.15);
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.main-btn,
+.secondary-btn {
+    width: 100%;
+
+    min-height: 48px;
+
+    border-radius: 13px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+    transition: 0.15s ease;
+}
+
+.main-btn {
+    background: #a8d6b3;
+
+    color: #092012;
+
+    box-shadow:
+        0 8px 25px rgba(115, 184, 132, 0.16);
+}
+
+.secondary-btn {
+    margin-top: 10px;
+
+    background:
+        rgba(157, 201, 169, 0.08);
+
+    color: #b9d7c1;
+
+    border:
+        1px solid rgba(157, 201, 169, 0.12);
+}
+
+.main-btn:active,
+.secondary-btn:active {
+    transform: scale(0.96);
+}
+
+
+/* =========================
+   BEST SCORE
+========================= */
+
+.best-text {
+    margin-top: 17px;
+
+    color: #8fae98;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================
+   GAME OVER / PAUSE
+========================= */
+
+.game-over-title,
+.pause-title {
+    margin-bottom: 25px;
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.results {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 45px;
+
+    margin-bottom: 25px;
+}
+
+.results div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.results span {
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    color: #89a891;
+}
+
+.results strong {
+    font-size: 27px;
+}
+
+
+/* =========================
+   TAP HINT
+========================= */
+
+.hint {
+    position: absolute;
+
+    left: 50%;
+    bottom: 25px;
+
+    transform: translateX(-50%);
+
+    z-index: 4;
+
+    padding: 8px 13px;
+
+    border-radius: 20px;
+
+    color:
+        rgba(229, 244, 232, 0.6);
+
+    background:
+        rgba(4, 12, 8, 0.25);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.4s ease;
+}
+
+.hint.hide {
+    opacity: 0;
+}
+
+
+/* =========================
+   LARGER SCREENS
+========================= */
+
+@media (min-width: 600px) {
+
+    .top-bar {
+        height: 64px;
+        min-height: 64px;
+    }
+
+    .game-title {
+        font-size: 14px;
+    }
+}
