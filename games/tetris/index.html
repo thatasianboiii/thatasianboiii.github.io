@@ -39,13 +39,11 @@
     </header>
 
 
-    <!-- MAIN GAME -->
+    <!-- GAME -->
 
     <main class="game-area">
 
         <div class="game-layout">
-
-            <!-- TETRIS BOARD -->
 
             <div class="board-container">
 
@@ -134,21 +132,11 @@
                     <strong id="level">1</strong>
                 </div>
 
-
                 <div class="preview">
 
                     <span>NEXT</span>
 
                     <canvas id="nextCanvas"></canvas>
-
-                </div>
-
-
-                <div class="preview hold-preview">
-
-                    <span>HOLD</span>
-
-                    <canvas id="holdCanvas"></canvas>
 
                 </div>
 
@@ -163,7 +151,7 @@
 
     <section class="controls">
 
-        <div class="control-row">
+        <div class="direction-controls">
 
             <button
                 id="leftBtn"
@@ -174,7 +162,7 @@
 
             <button
                 id="rotateBtn"
-                class="control"
+                class="control rotate"
             >
                 ↻
             </button>
@@ -189,36 +177,31 @@
         </div>
 
 
-        <div class="control-row">
+        <div class="control-labels">
 
-            <button
-                id="holdBtn"
-                class="control small"
-            >
-                HOLD
-            </button>
-
-            <button
-                id="dropBtn"
-                class="control drop"
-            >
-                DROP
-            </button>
-
-            <button
-                id="downBtn"
-                class="control"
-            >
-                ↓
-            </button>
+            <span>LEFT</span>
+            <span>ROTATE</span>
+            <span>RIGHT</span>
 
         </div>
+
+
+        <button
+            id="dropBtn"
+            class="control drop"
+        >
+            ↓
+        </button>
+
+        <span class="drop-label">
+            DROP
+        </span>
 
     </section>
 
 
     <div class="hint">
-        SWIPE • TAP • HOLD
+        TAP • SWIPE
     </div>
 
 </div>
