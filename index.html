@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <meta name="theme-color" content="#07070a">
+    <meta
+        name="theme-color"
+        content="#07120d"
+    >
 
     <title>The Asian Boy</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-    <!-- Atmospheric background -->
-    <div class="space"></div>
-    <div class="stars"></div>
-    <div class="glow glow-one"></div>
-    <div class="glow glow-two"></div>
+    <!-- Interactive background canvas -->
+    <canvas id="backgroundCanvas"></canvas>
 
-    <!-- =========================
-         HOME
-    ========================== -->
 
     <main>
+
+        <!-- =========================================
+             HOME
+        ========================================== -->
 
         <section class="screen home">
 
@@ -43,8 +49,11 @@
                 </p>
 
                 <div class="scroll-hint">
+
                     <span>scroll to explore</span>
+
                     <span class="scroll-arrow">↓</span>
+
                 </div>
 
             </div>
@@ -52,47 +61,90 @@
         </section>
 
 
-        <!-- =========================
+        <!-- =========================================
              GAMES
-        ========================== -->
+        ========================================== -->
 
         <section class="screen">
 
             <div class="section-content">
 
                 <header class="section-header">
+
                     <span class="section-number">01</span>
+
                     <h2>Games</h2>
+
                 </header>
+
 
                 <div class="app-list">
 
-                    <button class="app" type="button">
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='games/flappy-bird/'"
+                    >
                         <span>Flappy Bird</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='games/tic-tac-toe/'"
+                    >
                         <span>Tic-Tac-Toe</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='games/snake/'"
+                    >
                         <span>Snake</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
-                        <span>Carrom</span>
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='games/tetris/'"
+                    >
+                        <span>Tetris</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='games/breakout/'"
+                    >
+                        <span>Breakout</span>
+                        <span class="arrow">↗</span>
+                    </button>
+
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='games/angry-birds/'"
+                    >
                         <span>Angry Birds</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='games/cube-solver/'"
+                    >
                         <span>Cube Solver</span>
                         <span class="arrow">↗</span>
                     </button>
@@ -104,37 +156,60 @@
         </section>
 
 
-        <!-- =========================
+        <!-- =========================================
              FILMS
-        ========================== -->
+        ========================================== -->
 
         <section class="screen">
 
             <div class="section-content">
 
                 <header class="section-header">
+
                     <span class="section-number">02</span>
+
                     <h2>Films</h2>
+
                 </header>
+
 
                 <div class="app-list">
 
-                    <button class="app" type="button">
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='films/chinese-movies/'"
+                    >
                         <span>Chinese Movies</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='films/hindi-movies/'"
+                    >
                         <span>Hindi Movies</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='films/japanese-movies/'"
+                    >
                         <span>Japanese Movies</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='films/korean-movies/'"
+                    >
                         <span>Korean Movies</span>
                         <span class="arrow">↗</span>
                     </button>
@@ -146,32 +221,50 @@
         </section>
 
 
-        <!-- =========================
+        <!-- =========================================
              SIMULATIONS
-        ========================== -->
+        ========================================== -->
 
         <section class="screen">
 
             <div class="section-content">
 
                 <header class="section-header">
+
                     <span class="section-number">03</span>
+
                     <h2>Simulations</h2>
+
                 </header>
+
 
                 <div class="app-list">
 
-                    <button class="app" type="button">
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='simulations/solar-system/'"
+                    >
                         <span>Solar System</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='simulations/double-pendulum/'"
+                    >
                         <span>Double Pendulum</span>
                         <span class="arrow">↗</span>
                     </button>
 
-                    <button class="app" type="button">
+
+                    <button
+                        class="app"
+                        type="button"
+                        onclick="window.location.href='simulations/fireworks/'"
+                    >
                         <span>Fireworks</span>
                         <span class="arrow">↗</span>
                     </button>
@@ -184,5 +277,9 @@
 
     </main>
 
+
+    <script src="script.js"></script>
+
 </body>
+
 </html>
