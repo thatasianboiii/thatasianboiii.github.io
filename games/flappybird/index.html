@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+    <meta name="theme-color" content="#08140f">
+
+    <title>Flappy Bird — The Asian Boy</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="game-shell">
+
+        <header class="top-bar">
+
+            <button class="back-btn" id="backBtn">
+                ← Home
+            </button>
+
+            <div class="game-title">
+                FLAPPY BIRD
+            </div>
+
+            <button class="pause-btn" id="pauseBtn">
+                Ⅱ
+            </button>
+
+        </header>
+
+
+        <section class="game-area" id="gameArea">
+
+            <canvas id="gameCanvas"></canvas>
+
+            <div class="score-display" id="scoreDisplay">
+                0
+            </div>
+
+
+            <!-- START SCREEN -->
+
+            <div class="overlay" id="startScreen">
+
+                <div class="panel">
+
+                    <div class="bird-icon">
+                        ●
+                    </div>
+
+                    <h1>FLAPPY BIRD</h1>
+
+                    <p>Tap to flap</p>
+
+                    <button class="main-btn" id="startBtn">
+                        START GAME
+                    </button>
+
+                    <div class="best-text">
+                        BEST:
+                        <span id="startBest">0</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- GAME OVER -->
+
+            <div class="overlay hidden" id="gameOverScreen">
+
+                <div class="panel">
+
+                    <div class="game-over-title">
+                        GAME OVER
+                    </div>
+
+                    <div class="results">
+
+                        <div>
+                            <span>SCORE</span>
+                            <strong id="finalScore">0</strong>
+                        </div>
+
+                        <div>
+                            <span>BEST</span>
+                            <strong id="finalBest">0</strong>
+                        </div>
+
+                    </div>
+
+                    <button class="main-btn" id="restartBtn">
+                        PLAY AGAIN
+                    </button>
+
+                    <button class="secondary-btn" id="homeBtn">
+                        HOME
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAUSE -->
+
+            <div class="overlay hidden" id="pauseScreen">
+
+                <div class="panel">
+
+                    <div class="pause-title">
+                        PAUSED
+                    </div>
+
+                    <button class="main-btn" id="resumeBtn">
+                        RESUME
+                    </button>
+
+                    <button class="secondary-btn" id="restartPauseBtn">
+                        RESTART
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="hint" id="hint">
+                TAP TO FLAP
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
