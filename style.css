@@ -1,0 +1,571 @@
+/* =========================================================
+   FONTS
+========================================================= */
+
+@font-face {
+    font-family: "Spell of Asia";
+    src: url("fonts/Spell of Asia.ttf") format("truetype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Edosz";
+    src: url("fonts/Edosz.ttf") format("truetype");
+    font-display: swap;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+
+    background: #060609;
+
+    color: #f3f0ea;
+
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    overflow-x: hidden;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================================================
+   ATMOSPHERE
+========================================================= */
+
+.space {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: -5;
+
+    background:
+        radial-gradient(
+            circle at 20% 15%,
+            rgba(88, 72, 180, 0.18),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 70%,
+            rgba(170, 45, 110, 0.12),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(40, 100, 150, 0.10),
+            transparent 40%
+        ),
+        #060609;
+}
+
+
+/* Tiny stars */
+
+.stars {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: -4;
+
+    opacity: 0.55;
+
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.25) 1px, transparent 1px);
+
+    background-size:
+        97px 113px,
+        151px 173px,
+        223px 197px;
+
+    background-position:
+        13px 37px,
+        72px 11px,
+        101px 83px;
+
+    animation: star-drift 35s linear infinite;
+}
+
+@keyframes star-drift {
+
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-20px, -35px, 0);
+    }
+}
+
+
+/* Ambient glows */
+
+.glow {
+    position: fixed;
+
+    width: 260px;
+    height: 260px;
+
+    border-radius: 50%;
+
+    filter: blur(90px);
+
+    pointer-events: none;
+
+    z-index: -3;
+
+    opacity: 0.10;
+}
+
+.glow-one {
+    top: 5%;
+    left: -100px;
+
+    background: #735cff;
+
+    animation: glow-one 18s ease-in-out infinite alternate;
+}
+
+.glow-two {
+    right: -100px;
+    bottom: 10%;
+
+    background: #e83e8c;
+
+    animation: glow-two 22s ease-in-out infinite alternate;
+}
+
+@keyframes glow-one {
+
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(100px, 120px, 0);
+    }
+}
+
+@keyframes glow-two {
+
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-90px, -100px, 0);
+    }
+}
+
+
+/* =========================================================
+   FULL SCREEN SECTIONS
+========================================================= */
+
+.screen {
+
+    min-height: 100svh;
+
+    min-height: 100vh;
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding:
+        max(40px, env(safe-area-inset-top))
+        24px
+        max(40px, env(safe-area-inset-bottom));
+
+    scroll-snap-align: start;
+}
+
+
+/* Enable section-by-section scrolling */
+
+html {
+    scroll-snap-type: y proximity;
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+.home {
+    text-align: center;
+}
+
+.home-content {
+
+    width: 100%;
+
+    max-width: 600px;
+
+    animation: home-in 1.2s ease both;
+}
+
+@keyframes home-in {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
+
+
+.eyebrow {
+
+    margin: 0 0 20px;
+
+    color: rgba(255,255,255,0.45);
+
+    font-size: 0.65rem;
+
+    letter-spacing: 0.35em;
+
+    text-transform: uppercase;
+}
+
+
+.home h1 {
+
+    margin: 0;
+
+    font-family: "Spell of Asia", sans-serif;
+
+    font-size: clamp(4rem, 19vw, 7rem);
+
+    font-weight: normal;
+
+    line-height: 0.9;
+}
+
+
+.intro {
+
+    max-width: 450px;
+
+    margin: 30px auto 0;
+
+    color: rgba(255,255,255,0.60);
+
+    font-size: 0.92rem;
+
+    line-height: 1.7;
+
+    font-style: italic;
+}
+
+
+/* Scroll hint */
+
+.scroll-hint {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 70px;
+
+    color: rgba(255,255,255,0.38);
+
+    font-size: 0.65rem;
+
+    letter-spacing: 0.15em;
+
+    text-transform: uppercase;
+}
+
+.scroll-arrow {
+
+    font-size: 1.2rem;
+
+    animation: bounce 1.8s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+    0%, 100% {
+        transform: translateY(0);
+
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: translateY(7px);
+
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   SECTION CONTENT
+========================================================= */
+
+.section-content {
+
+    width: 100%;
+
+    max-width: 620px;
+}
+
+
+/* Heading */
+
+.section-header {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 12px;
+
+    margin-bottom: 42px;
+}
+
+.section-number {
+
+    color: rgba(255,255,255,0.25);
+
+    font-size: 0.65rem;
+
+    letter-spacing: 0.1em;
+}
+
+.section-header h2 {
+
+    margin: 0;
+
+    font-family: "Edosz", sans-serif;
+
+    font-size: clamp(2.3rem, 11vw, 4rem);
+
+    font-weight: normal;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   APP LIST
+========================================================= */
+
+.app-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+
+.app {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    width: 100%;
+
+    min-height: 58px;
+
+    padding: 8px 4px;
+
+    border: 0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    background: transparent;
+
+    color: rgba(255,255,255,0.82);
+
+    font-family: inherit;
+
+    font-size: 1.05rem;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        color 180ms ease,
+        background 180ms ease,
+        padding 180ms ease;
+}
+
+
+/* Accent line */
+
+.app::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    bottom: 0;
+
+    width: 2px;
+
+    background: rgba(255,255,255,0.8);
+
+    transform: scaleY(0);
+
+    transform-origin: center;
+
+    transition:
+        transform 180ms ease;
+}
+
+
+/* Arrow */
+
+.arrow {
+
+    color: rgba(255,255,255,0.35);
+
+    font-size: 1.2rem;
+
+    opacity: 0;
+
+    transform: translateX(-8px);
+
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+}
+
+
+/* Touch */
+
+.app:active {
+
+    padding-left: 16px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.09),
+            transparent
+        );
+
+    color: #ffffff;
+
+    transform: scale(0.985);
+}
+
+.app:active::before {
+
+    transform: scaleY(1);
+}
+
+.app:active .arrow {
+
+    opacity: 1;
+
+    transform: translateX(0);
+}
+
+
+/* Remove button defaults */
+
+.app:focus {
+
+    outline: none;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .screen {
+
+        padding-left: 22px;
+
+        padding-right: 22px;
+    }
+
+    .section-header {
+
+        margin-bottom: 35px;
+    }
+
+    .app {
+
+        min-height: 56px;
+
+        font-size: 1rem;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+    }
+}
