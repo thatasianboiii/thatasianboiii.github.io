@@ -11,15 +11,18 @@ const {
 } = Matter;
 
 
-/* =====================================
+/* =========================================
    ELEMENTS
-===================================== */
+========================================= */
 
 const canvas =
     document.getElementById("gameCanvas");
 
-const container =
-    document.getElementById("game-container");
+const gameArea =
+    document.getElementById("gameArea");
+
+const rotateScreen =
+    document.getElementById("rotateScreen");
 
 const scoreElement =
     document.getElementById("score");
@@ -27,7 +30,7 @@ const scoreElement =
 const birdCountElement =
     document.getElementById("birdCount");
 
-const powerElement =
+const power =
     document.getElementById("power");
 
 const powerFill =
@@ -48,35 +51,31 @@ const nextBtn =
 const restartBtn =
     document.getElementById("restartBtn");
 
-const help =
-    document.getElementById("help");
+const homeBtn =
+    document.getElementById("homeBtn");
 
 const helpBtn =
     document.getElementById("helpBtn");
 
-const closeHelp =
-    document.getElementById("closeHelp");
 
-const homeBtn =
-    document.getElementById("homeBtn");
-
-
-/* =====================================
-   MATTER ENGINE
-===================================== */
+/* =========================================
+   ENGINE
+========================================= */
 
 const engine =
     Engine.create();
 
-engine.gravity.y = 1.05;
+engine.gravity.y =
+    1.05;
+
 
 const world =
     engine.world;
 
 
-/* =====================================
+/* =========================================
    RENDERER
-===================================== */
+========================================= */
 
 const render =
     Render.create({
@@ -88,14 +87,16 @@ const render =
         options: {
 
             width:
-                container.clientWidth,
+                gameArea.clientWidth,
 
             height:
-                container.clientHeight,
+                gameArea.clientHeight,
 
-            wireframes: false,
+            wireframes:
+                false,
 
-            background: "transparent",
+            background:
+                "transparent",
 
             pixelRatio:
                 Math.min(
@@ -118,17 +119,15 @@ Runner.run(
 );
 
 
-/* =====================================
+/* =========================================
    STATE
-===================================== */
+========================================= */
 
 let score = 0;
 
-let level = 1;
-
 let birdsLeft = 3;
 
-let currentBird = null;
+let bird = null;
 
 let sling = null;
 
@@ -136,421 +135,356 @@ let dragging = false;
 
 let launched = false;
 
-let levelComplete = false;
+let levelFinished = false;
 
-let levelObjects = [];
+let targetBoxes = [];
 
-let targetObjects = [];
-
-let cameraX = 0;
+let worldObjects = [];
 
 
-/* =====================================
-   WORLD DIMENSIONS
-===================================== */
+/* =========================================
+   DIMENSIONS
+========================================= */
 
-function W() {
+function width() {
 
-    return container.clientWidth;
-}
-
-function H() {
-
-    return container.clientHeight;
+    return gameArea.clientWidth;
 }
 
 
-/* =====================================
-   LEVEL POSITIONS
-===================================== */
+function height() {
 
-function getSlingX() {
+    return gameArea.clientHeight;
+}
+
+
+/* =========================================
+   SLINGSHOT
+========================================= */
+
+function slingX() {
 
     return Math.max(
-        90,
-        W() * 0.15
+        85,
+        width() * 0.14
     );
 }
 
-function getSlingY() {
 
-    return H() - 95;
-}
+function slingY() {
 
-function getTargetX() {
-
-    return W() * 0.72;
+    return height() - 90;
 }
 
 
-/* =====================================
+/* =========================================
+   TARGET POSITION
+========================================= */
+
+function targetX() {
+
+    return width() * 0.73;
+}
+
+
+/* =========================================
    GROUND
-===================================== */
+========================================= */
 
 function createGround() {
 
     const ground =
         Bodies.rectangle(
 
-            W() / 2,
+            width() / 2,
 
-            H() + 25,
+            height() + 20,
 
-            W() * 2,
+            width() * 2,
 
-            50,
+            45,
 
             {
-                isStatic: true,
 
-                label: "ground",
+                isStatic:
+                    true,
+
+                label:
+                    "ground",
 
                 render: {
 
                     fillStyle:
-                        "#4b8048"
+                        "#527f48"
                 }
+
             }
         );
+
 
     Composite.add(
         world,
         ground
     );
 
-    levelObjects.push(
+
+    worldObjects.push(
         ground
     );
 }
 
 
-/* =====================================
-   BLOCK
-===================================== */
+/* =========================================
+   TARGET BOX
+========================================= */
 
-function createBlock(
+function createTargetBox(
     x,
     y,
-    width,
-    height,
-    type = "wood"
+    w,
+    h,
+    color = "#b97843"
 ) {
 
-    const colors = {
-
-        wood: "#a87543",
-
-        stone: "#858f89",
-
-        glass: "#8bcbd0"
-    };
-
-
-    const block =
+    const box =
         Bodies.rectangle(
 
             x,
             y,
 
-            width,
-            height,
+            w,
+            h,
 
             {
-                restitution: 0.15,
 
-                friction: 0.7,
+                label:
+                    "target",
 
-                density: 0.003,
+                density:
+                    0.0025,
 
-                label: "block",
+                friction:
+                    0.7,
+
+                frictionAir:
+                    0.01,
+
+                restitution:
+                    0.12,
 
                 render: {
 
                     fillStyle:
-                        colors[type]
-                }
-            }
-        );
-
-
-    block.blockType =
-        type;
-
-
-    Composite.add(
-        world,
-        block
-    );
-
-    levelObjects.push(
-        block
-    );
-
-    return block;
-}
-
-
-/* =====================================
-   PIG
-===================================== */
-
-function createPig(
-    x,
-    y,
-    radius = 20
-) {
-
-    const pig =
-        Bodies.circle(
-
-            x,
-            y,
-
-            radius,
-
-            {
-                restitution: 0.2,
-
-                friction: 0.5,
-
-                density: 0.0015,
-
-                label: "pig",
-
-                render: {
-
-                    fillStyle:
-                        "#82c96b",
+                        color,
 
                     strokeStyle:
-                        "#385d31",
+                        "#5a3824",
 
-                    lineWidth: 2
+                    lineWidth:
+                        2
                 }
+
             }
         );
 
 
+    box.target =
+        true;
+
+
     Composite.add(
         world,
-        pig
+        box
     );
 
-    targetObjects.push(
-        pig
+
+    targetBoxes.push(
+        box
     );
 
-    return pig;
+    worldObjects.push(
+        box
+    );
+
+
+    return box;
 }
 
 
-/* =====================================
-   BUILD LEVEL
-===================================== */
+/* =========================================
+   BUILD TARGET STRUCTURE
+========================================= */
 
-function buildLevel() {
+function buildTargets() {
 
-    clearLevel();
+    const x =
+        targetX();
 
 
-    const sx =
-        getSlingX();
-
-    const sy =
-        getSlingY();
+    const ground =
+        height() - 42;
 
 
     /*
-       Ground
+       Bottom row
     */
 
-    createGround();
-
-
-    /*
-       Target tower
-
-       Everything is deliberately
-       placed well inside the visible
-       landscape screen.
-    */
-
-    const tx =
-        getTargetX();
-
-    const groundY =
-        H() - 50;
-
-
-    /*
-       Bottom foundation
-    */
-
-    createBlock(
-        tx - 80,
-        groundY - 30,
-        38,
+    createTargetBox(
+        x - 90,
+        ground - 30,
+        34,
         60,
-        "wood"
+        "#a66d3d"
     );
 
-    createBlock(
-        tx + 80,
-        groundY - 30,
-        38,
+
+    createTargetBox(
+        x,
+        ground - 30,
+        34,
         60,
-        "wood"
+        "#b87a45"
+    );
+
+
+    createTargetBox(
+        x + 90,
+        ground - 30,
+        34,
+        60,
+        "#a66d3d"
     );
 
 
     /*
-       Bottom platform
+       First platform
     */
 
-    createBlock(
-        tx,
-        groundY - 70,
-        205,
-        28,
-        "wood"
-    );
-
-
-    /*
-       Vertical supports
-    */
-
-    createBlock(
-        tx - 70,
-        groundY - 125,
-        30,
-        90,
-        "stone"
-    );
-
-    createBlock(
-        tx + 70,
-        groundY - 125,
-        30,
-        90,
-        "stone"
-    );
-
-
-    /*
-       Upper platform
-    */
-
-    createBlock(
-        tx,
-        groundY - 175,
-        170,
-        26,
-        "wood"
-    );
-
-
-    /*
-       PIGS
-
-       Two targets so there is
-       something obvious to shoot.
-    */
-
-    createPig(
-        tx,
-        groundY - 105,
-        21
-    );
-
-    createPig(
-        tx,
-        groundY - 205,
-        19
-    );
-
-
-    /*
-       Little roof
-    */
-
-    createBlock(
-        tx,
-        groundY - 235,
-        115,
+    createTargetBox(
+        x,
+        ground - 70,
+        220,
         24,
-        "wood"
+        "#c1874d"
     );
 
 
     /*
-       Bird
+       Middle supports
     */
 
-    createBird();
-
-
-    updateBirdDisplay();
-}
-
-
-/* =====================================
-   CLEAR
-===================================== */
-
-function clearLevel() {
-
-    Composite.clear(
-        world,
-        false
+    createTargetBox(
+        x - 65,
+        ground - 125,
+        30,
+        85,
+        "#8f633e"
     );
 
-    currentBird = null;
 
-    sling = null;
+    createTargetBox(
+        x + 65,
+        ground - 125,
+        30,
+        85,
+        "#8f633e"
+    );
 
-    levelObjects = [];
 
-    targetObjects = [];
+    /*
+       Middle platform
+    */
 
-    dragging = false;
+    createTargetBox(
+        x,
+        ground - 175,
+        165,
+        24,
+        "#c1874d"
+    );
 
-    launched = false;
+
+    /*
+       Upper supports
+    */
+
+    createTargetBox(
+        x - 45,
+        ground - 220,
+        28,
+        70,
+        "#9d6c40"
+    );
+
+
+    createTargetBox(
+        x + 45,
+        ground - 220,
+        28,
+        70,
+        "#9d6c40"
+    );
+
+
+    /*
+       Top box
+    */
+
+    createTargetBox(
+        x,
+        ground - 270,
+        90,
+        28,
+        "#c1874d"
+    );
 }
 
 
-/* =====================================
+/* =========================================
    CREATE BIRD
-===================================== */
+========================================= */
 
 function createBird() {
 
     if (
         birdsLeft <= 0
     ) {
+
         return;
     }
 
 
-    const bird =
+    const x =
+        slingX();
+
+    const y =
+        slingY();
+
+
+    bird =
         Bodies.circle(
 
-            getSlingX(),
-
-            getSlingY(),
+            x,
+            y,
 
             18,
 
             {
-                isStatic: true,
 
-                restitution: 0.35,
+                isStatic:
+                    true,
 
-                friction: 0.5,
+                density:
+                    0.002,
 
-                density: 0.002,
+                restitution:
+                    0.25,
 
-                label: "bird",
+                friction:
+                    0.5,
+
+                label:
+                    "bird",
 
                 render: {
 
@@ -558,16 +492,14 @@ function createBird() {
                         "#d94335",
 
                     strokeStyle:
-                        "#68251f",
+                        "#641e19",
 
-                    lineWidth: 2
+                    lineWidth:
+                        2
                 }
+
             }
         );
-
-
-    currentBird =
-        bird;
 
 
     Composite.add(
@@ -581,11 +513,8 @@ function createBird() {
 
             pointA: {
 
-                x:
-                    getSlingX(),
-
-                y:
-                    getSlingY()
+                x,
+                y
             },
 
             bodyB:
@@ -598,13 +527,7 @@ function createBird() {
                 0.02,
 
             length:
-                0,
-
-            render: {
-
-                visible:
-                    false
-            }
+                0
         });
 
 
@@ -615,13 +538,51 @@ function createBird() {
 }
 
 
-/* =====================================
-   BIRD DISPLAY
-===================================== */
+/* =========================================
+   BUILD LEVEL
+========================================= */
 
-function updateBirdDisplay() {
+function buildLevel() {
 
-    let text = "";
+    Composite.clear(
+        world,
+        false
+    );
+
+
+    targetBoxes = [];
+
+    worldObjects = [];
+
+    bird = null;
+
+    sling = null;
+
+    dragging = false;
+
+    launched = false;
+
+    levelFinished = false;
+
+
+    createGround();
+
+    buildTargets();
+
+    createBird();
+
+    updateBirdCount();
+}
+
+
+/* =========================================
+   BIRD COUNTER
+========================================= */
+
+function updateBirdCount() {
+
+    let result = "";
+
 
     for (
         let i = 0;
@@ -629,34 +590,23 @@ function updateBirdDisplay() {
         i++
     ) {
 
-        text +=
-            "● ";
+        result +=
+            "●";
     }
 
 
     birdCountElement.textContent =
-        text || "—";
+        result || "—";
 }
 
 
-/* =====================================
-   SCORE
-===================================== */
+/* =========================================
+   POINTER POSITION
+========================================= */
 
-function addScore(points) {
-
-    score += points;
-
-    scoreElement.textContent =
-        score;
-}
-
-
-/* =====================================
-   POINTER
-===================================== */
-
-function getPointer(event) {
+function pointerPosition(
+    event
+) {
 
     const rect =
         canvas.getBoundingClientRect();
@@ -675,25 +625,26 @@ function getPointer(event) {
 }
 
 
-/* =====================================
-   DRAG START
-===================================== */
+/* =========================================
+   POINTER DOWN
+========================================= */
 
 canvas.addEventListener(
     "pointerdown",
     event => {
 
         if (
-            !currentBird ||
+            !bird ||
             launched ||
-            levelComplete
+            levelFinished
         ) {
+
             return;
         }
 
 
         const point =
-            getPointer(event);
+            pointerPosition(event);
 
 
         const distance =
@@ -701,7 +652,7 @@ canvas.addEventListener(
 
                 Vector.sub(
                     point,
-                    currentBird.position
+                    bird.position
                 )
             );
 
@@ -709,6 +660,7 @@ canvas.addEventListener(
         if (
             distance > 55
         ) {
+
             return;
         }
 
@@ -721,16 +673,16 @@ canvas.addEventListener(
         );
 
 
-        powerElement.classList.add(
+        power.classList.add(
             "visible"
         );
     }
 );
 
 
-/* =====================================
-   DRAG
-===================================== */
+/* =========================================
+   POINTER MOVE
+========================================= */
 
 canvas.addEventListener(
     "pointermove",
@@ -738,21 +690,22 @@ canvas.addEventListener(
 
         if (
             !dragging ||
-            !currentBird
+            !bird
         ) {
+
             return;
         }
 
 
         const point =
-            getPointer(event);
+            pointerPosition(event);
 
 
         const sx =
-            getSlingX();
+            slingX();
 
         const sy =
-            getSlingY();
+            slingY();
 
 
         let dx =
@@ -762,7 +715,11 @@ canvas.addEventListener(
             point.y - sy;
 
 
-        const max =
+        /*
+           Maximum pull distance.
+        */
+
+        const maxPull =
             105;
 
 
@@ -774,11 +731,11 @@ canvas.addEventListener(
 
 
         if (
-            distance > max
+            distance > maxPull
         ) {
 
             const ratio =
-                max / distance;
+                maxPull / distance;
 
             dx *= ratio;
             dy *= ratio;
@@ -786,8 +743,8 @@ canvas.addEventListener(
 
 
         /*
-           Bird cannot be pulled
-           in front of the sling.
+           Don't allow the bird
+           to be pulled forward.
         */
 
         if (
@@ -799,7 +756,7 @@ canvas.addEventListener(
 
 
         Body.setPosition(
-            currentBird,
+            bird,
             {
 
                 x:
@@ -811,7 +768,7 @@ canvas.addEventListener(
         );
 
 
-        const power =
+        const powerAmount =
             Math.min(
                 100,
 
@@ -820,21 +777,21 @@ canvas.addEventListener(
                         dx * dx +
                         dy * dy
                     ) /
-                    max *
+                    maxPull *
                     100
                 )
             );
 
 
         powerFill.style.width =
-            power + "%";
+            powerAmount + "%";
     }
 );
 
 
-/* =====================================
+/* =========================================
    RELEASE
-===================================== */
+========================================= */
 
 canvas.addEventListener(
     "pointerup",
@@ -842,8 +799,9 @@ canvas.addEventListener(
 
         if (
             !dragging ||
-            !currentBird
+            !bird
         ) {
+
             return;
         }
 
@@ -851,7 +809,7 @@ canvas.addEventListener(
         dragging = false;
 
 
-        powerElement.classList.remove(
+        power.classList.remove(
             "visible"
         );
 
@@ -861,49 +819,29 @@ canvas.addEventListener(
 
 
         const sx =
-            getSlingX();
+            slingX();
 
         const sy =
-            getSlingY();
+            slingY();
 
 
-        const dx =
+        const pullX =
             sx -
-            currentBird.position.x;
+            bird.position.x;
 
-        const dy =
+        const pullY =
             sy -
-            currentBird.position.y;
+            bird.position.y;
 
 
-        Body.setStatic(
-            currentBird,
-            false
-        );
+        /*
+           Remove the sling BEFORE
+           activating the bird.
+        */
 
-
-        Body.setVelocity(
-            currentBird,
-            {
-
-                x:
-                    dx * 0.13,
-
-                y:
-                    dy * 0.13
-            }
-        );
-
-
-        launched = true;
-
-
-        birdsLeft--;
-
-        updateBirdDisplay();
-
-
-        if (sling) {
+        if (
+            sling
+        ) {
 
             Composite.remove(
                 world,
@@ -914,89 +852,167 @@ canvas.addEventListener(
         }
 
 
+        Body.setStatic(
+            bird,
+            false
+        );
+
+
+        /*
+           Moderate launch speed.
+
+           The previous version could
+           launch the bird so violently
+           that it immediately left the
+           canvas.
+        */
+
+        const velocity = {
+
+            x:
+                pullX * 0.105,
+
+            y:
+                pullY * 0.105
+        };
+
+
+        Body.setVelocity(
+            bird,
+            velocity
+        );
+
+
+        launched = true;
+
+        birdsLeft--;
+
+        updateBirdCount();
+
+
         setTimeout(
-            checkBird,
-            2200
+            monitorBird,
+            1800
         );
     }
 );
 
 
-/* =====================================
-   CHECK BIRD
-===================================== */
+/* =========================================
+   MONITOR BIRD
+========================================= */
 
-function checkBird() {
+function monitorBird() {
 
     if (
-        !currentBird
+        levelFinished
     ) {
+
+        return;
+    }
+
+
+    if (
+        targetBoxes.length === 0
+    ) {
+
+        completeLevel();
+
+        return;
+    }
+
+
+    if (
+        !bird
+    ) {
+
         return;
     }
 
 
     const speed =
         Vector.magnitude(
-            currentBird.velocity
+            bird.velocity
         );
 
 
     const offscreen =
-        currentBird.position.y >
-            H() + 250;
+        bird.position.x >
+            width() + 250 ||
 
+        bird.position.x <
+            -250 ||
+
+        bird.position.y >
+            height() + 250;
+
+
+    /*
+       If the bird has basically
+       stopped or left the arena,
+       prepare the next bird.
+    */
 
     if (
-        speed < 1.1 ||
+        speed < 0.75 ||
         offscreen
     ) {
-
-        if (
-            targetObjects.length === 0
-        ) {
-
-            finishLevel(
-                true
-            );
-
-            return;
-        }
-
 
         if (
             birdsLeft > 0
         ) {
 
-            currentBird = null;
-
-            launched = false;
-
-
-            setTimeout(
-                createBird,
-                500
-            );
+            prepareNextBird();
 
         } else {
 
-            finishLevel(
-                false
-            );
+            endLevel();
         }
 
-    } else {
 
-        setTimeout(
-            checkBird,
-            800
-        );
+        return;
     }
+
+
+    setTimeout(
+        monitorBird,
+        500
+    );
 }
 
 
-/* =====================================
+/* =========================================
+   NEXT BIRD
+========================================= */
+
+function prepareNextBird() {
+
+    if (
+        bird
+    ) {
+
+        Composite.remove(
+            world,
+            bird
+        );
+    }
+
+
+    bird = null;
+
+    launched = false;
+
+
+    setTimeout(
+        createBird,
+        350
+    );
+}
+
+
+/* =========================================
    COLLISIONS
-===================================== */
+========================================= */
 
 Events.on(
     engine,
@@ -1015,100 +1031,92 @@ Events.on(
 
 
             /*
-               PIG
+               Target hit by bird
             */
 
             if (
-                a.label === "pig" ||
-                b.label === "pig"
+                (
+                    a.label === "target" &&
+                    b.label === "bird"
+                ) ||
+                (
+                    b.label === "target" &&
+                    a.label === "bird"
+                )
             ) {
 
-                const pig =
-                    a.label === "pig"
+                const target =
+                    a.label === "target"
                         ? a
                         : b;
 
-                const other =
-                    pig === a
-                        ? b
-                        : a;
+
+                const birdBody =
+                    a.label === "bird"
+                        ? a
+                        : b;
 
 
                 const impact =
                     Vector.magnitude(
-                        other.velocity
+                        birdBody.velocity
                     );
 
+
+                /*
+                   Strong enough hit
+                   breaks the box.
+                */
 
                 if (
-                    impact > 3.5
+                    impact > 4
                 ) {
 
-                    Composite.remove(
-                        world,
-                        pig
-                    );
-
-
-                    targetObjects =
-                        targetObjects.filter(
-                            item =>
-                                item !== pig
-                        );
-
-
-                    addScore(
-                        500
+                    destroyTarget(
+                        target
                     );
                 }
             }
 
 
             /*
-               BLOCK
+               Target hitting target.
+
+               This lets boxes break when
+               the structure collapses.
             */
 
             if (
-                a.label === "block" ||
-                b.label === "block"
+                a.label === "target" &&
+                b.label === "target"
             ) {
 
-                const block =
-                    a.label === "block"
-                        ? a
-                        : b;
-
-                const other =
-                    block === a
-                        ? b
-                        : a;
-
-
                 const impact =
-                    Vector.magnitude(
-                        other.velocity
+                    Math.max(
+
+                        Vector.magnitude(
+                            a.velocity
+                        ),
+
+                        Vector.magnitude(
+                            b.velocity
+                        )
                     );
 
 
                 if (
-                    impact > 6
+                    impact > 7
                 ) {
 
-                    Composite.remove(
-                        world,
-                        block
-                    );
+                    /*
+                       Only destroy one of
+                       the two at a time.
+                    */
 
-
-                    levelObjects =
-                        levelObjects.filter(
-                            item =>
-                                item !== block
-                        );
-
-
-                    addScore(
-                        100
+                    destroyTarget(
+                        impact > 10
+                            ? a
+                            : b
                     );
                 }
             }
@@ -1117,48 +1125,89 @@ Events.on(
 );
 
 
-/* =====================================
-   COMPLETE
-===================================== */
+/* =========================================
+   DESTROY TARGET
+========================================= */
 
-function finishLevel(
-    success
+function destroyTarget(
+    target
 ) {
 
     if (
-        levelComplete
+        !target ||
+        !target.target
     ) {
+
         return;
     }
 
 
-    levelComplete = true;
+    target.target =
+        false;
+
+
+    Composite.remove(
+        world,
+        target
+    );
+
+
+    targetBoxes =
+        targetBoxes.filter(
+            box =>
+                box !== target
+        );
+
+
+    worldObjects =
+        worldObjects.filter(
+            object =>
+                object !== target
+        );
+
+
+    score += 100;
+
+    scoreElement.textContent =
+        score;
 
 
     if (
-        success
+        targetBoxes.length === 0
     ) {
 
-        messageTitle.textContent =
-            "LEVEL COMPLETE";
-
-        messageText.textContent =
-            "All targets destroyed.";
-
-        nextBtn.textContent =
-            "NEXT LEVEL";
-
-    } else {
-
-        messageTitle.textContent =
-            "OUT OF BIRDS";
-
-        messageText.textContent =
-            "Try the level again.";
-
-        nextBtn.textContent =
-            "TRY AGAIN";
+        completeLevel();
     }
+}
+
+
+/* =========================================
+   COMPLETE
+========================================= */
+
+function completeLevel() {
+
+    if (
+        levelFinished
+    ) {
+
+        return;
+    }
+
+
+    levelFinished = true;
+
+
+    messageTitle.textContent =
+        "LEVEL COMPLETE";
+
+
+    messageText.textContent =
+        "You destroyed every box.";
+
+
+    nextBtn.textContent =
+        "PLAY AGAIN";
 
 
     message.classList.remove(
@@ -1167,109 +1216,112 @@ function finishLevel(
 }
 
 
-/* =====================================
-   NEXT
-===================================== */
+/* =========================================
+   OUT OF BIRDS
+========================================= */
+
+function endLevel() {
+
+    if (
+        levelFinished
+    ) {
+
+        return;
+    }
+
+
+    levelFinished = true;
+
+
+    messageTitle.textContent =
+        "OUT OF BIRDS";
+
+
+    messageText.textContent =
+        "Some boxes are still standing.";
+
+
+    nextBtn.textContent =
+        "TRY AGAIN";
+
+
+    message.classList.remove(
+        "hidden"
+    );
+}
+
+
+/* =========================================
+   NEXT / TRY AGAIN
+========================================= */
 
 nextBtn.addEventListener(
     "click",
     () => {
 
-        if (
-            targetObjects.length === 0
-        ) {
+        message.classList.add(
+            "hidden"
+        );
 
-            level++;
 
-            birdsLeft =
-                Math.min(
-                    3 + level,
-                    5
-                );
+        score = 0;
 
-            levelComplete = false;
+        scoreElement.textContent =
+            "0";
 
-            message.classList.add(
-                "hidden"
-            );
 
-            buildLevel();
+        birdsLeft = 3;
 
-        } else {
 
-            restart();
-        }
+        buildLevel();
     }
 );
 
 
-/* =====================================
+/* =========================================
    RESTART
-===================================== */
-
-function restart() {
-
-    score = 0;
-
-    scoreElement.textContent =
-        "0";
-
-    birdsLeft = 3;
-
-    levelComplete = false;
-
-    message.classList.add(
-        "hidden"
-    );
-
-    buildLevel();
-}
-
+========================================= */
 
 restartBtn.addEventListener(
     "click",
-    restart
-);
-
-
-/* =====================================
-   HELP
-===================================== */
-
-helpBtn.addEventListener(
-    "click",
     () => {
 
-        help.style.display =
-            "flex";
+        score = 0;
+
+        scoreElement.textContent =
+            "0";
+
+
+        birdsLeft = 3;
+
+
+        message.classList.add(
+            "hidden"
+        );
+
+
+        buildLevel();
     }
 );
 
 
-closeHelp.addEventListener(
-    "click",
-    () => {
-
-        help.style.display =
-            "none";
-    }
-);
-
-
-/* =====================================
+/* =========================================
    HOME
-===================================== */
+========================================= */
 
 homeBtn.addEventListener(
     "click",
     () => {
 
         /*
-           angry-birds is:
-           /games/angry-birds/
+           Current:
+           /games/angry-birds/index.html
 
-           Homepage is:
-           /
+           Homepage:
+           /index.html
+
+           Therefore:
+           ../../index.html
         */
 
         window.location.href =
@@ -1278,9 +1330,24 @@ homeBtn.addEventListener(
 );
 
 
-/* =====================================
-   CUSTOM DRAWING
-===================================== */
+/* =========================================
+   HELP
+========================================= */
+
+helpBtn.addEventListener(
+    "click",
+    () => {
+
+        alert(
+            "Drag the bird backwards, aim at the boxes, then release."
+        );
+    }
+);
+
+
+/* =========================================
+   DRAWING
+========================================= */
 
 Events.on(
     render,
@@ -1294,35 +1361,37 @@ Events.on(
         ctx.save();
 
 
-        const sx =
-            getSlingX();
-
-        const sy =
-            getSlingY();
-
-
         /*
            Slingshot
         */
 
-        ctx.strokeStyle =
-            "#563924";
+        const sx =
+            slingX();
 
-        ctx.lineWidth = 9;
+        const sy =
+            slingY();
+
 
         ctx.lineCap =
             "round";
 
 
+        ctx.strokeStyle =
+            "#573a27";
+
+        ctx.lineWidth =
+            8;
+
+
         ctx.beginPath();
 
         ctx.moveTo(
-            sx - 12,
-            sy + 45
+            sx - 11,
+            sy + 42
         );
 
         ctx.lineTo(
-            sx - 9,
+            sx - 8,
             sy
         );
 
@@ -1332,12 +1401,12 @@ Events.on(
         ctx.beginPath();
 
         ctx.moveTo(
-            sx + 12,
-            sy + 45
+            sx + 11,
+            sy + 42
         );
 
         ctx.lineTo(
-            sx + 9,
+            sx + 8,
             sy
         );
 
@@ -1349,33 +1418,27 @@ Events.on(
         */
 
         if (
-            currentBird &&
+            bird &&
             !launched
         ) {
 
-            const bx =
-                currentBird.position.x;
-
-            const by =
-                currentBird.position.y;
-
-
             ctx.strokeStyle =
-                "#39261d";
+                "#36251b";
 
-            ctx.lineWidth = 4;
+            ctx.lineWidth =
+                4;
 
 
             ctx.beginPath();
 
             ctx.moveTo(
-                sx - 9,
+                sx - 8,
                 sy
             );
 
             ctx.lineTo(
-                bx,
-                by
+                bird.position.x,
+                bird.position.y
             );
 
             ctx.stroke();
@@ -1384,13 +1447,13 @@ Events.on(
             ctx.beginPath();
 
             ctx.moveTo(
-                sx + 9,
+                sx + 8,
                 sy
             );
 
             ctx.lineTo(
-                bx,
-                by
+                bird.position.x,
+                bird.position.y
             );
 
             ctx.stroke();
@@ -1402,29 +1465,13 @@ Events.on(
         */
 
         if (
-            currentBird
+            bird
         ) {
 
             drawBird(
                 ctx,
-                currentBird.position.x,
-                currentBird.position.y
-            );
-        }
-
-
-        /*
-           Pig faces
-        */
-
-        for (
-            const pig of targetObjects
-        ) {
-
-            drawPig(
-                ctx,
-                pig.position.x,
-                pig.position.y
+                bird.position.x,
+                bird.position.y
             );
         }
 
@@ -1434,9 +1481,9 @@ Events.on(
 );
 
 
-/* =====================================
-   BIRD GRAPHICS
-===================================== */
+/* =========================================
+   BIRD FACE
+========================================= */
 
 function drawBird(
     ctx,
@@ -1444,8 +1491,12 @@ function drawBird(
     y
 ) {
 
+    /*
+       Eyes
+    */
+
     ctx.fillStyle =
-        "white";
+        "#ffffff";
 
 
     ctx.beginPath();
@@ -1469,8 +1520,12 @@ function drawBird(
     ctx.fill();
 
 
+    /*
+       Pupils
+    */
+
     ctx.fillStyle =
-        "#111";
+        "#111111";
 
 
     ctx.beginPath();
@@ -1495,46 +1550,11 @@ function drawBird(
 
 
     /*
-       Eyebrows
-    */
-
-    ctx.strokeStyle =
-        "#3b1715";
-
-    ctx.lineWidth = 3;
-
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        x - 12,
-        y - 11
-    );
-
-    ctx.lineTo(
-        x - 3,
-        y - 8
-    );
-
-    ctx.moveTo(
-        x + 3,
-        y - 8
-    );
-
-    ctx.lineTo(
-        x + 12,
-        y - 11
-    );
-
-    ctx.stroke();
-
-
-    /*
        Beak
     */
 
     ctx.fillStyle =
-        "#e3a329";
+        "#e3a32b";
 
 
     ctx.beginPath();
@@ -1560,123 +1580,135 @@ function drawBird(
 }
 
 
-/* =====================================
-   PIG GRAPHICS
-===================================== */
+/* =========================================
+   RESIZE
+========================================= */
 
-function drawPig(
-    ctx,
-    x,
-    y
-) {
+function resizeGame() {
 
-    ctx.fillStyle =
-        "white";
+    const w =
+        gameArea.clientWidth;
+
+    const h =
+        gameArea.clientHeight;
 
 
-    ctx.beginPath();
+    render.options.width =
+        w;
 
-    ctx.arc(
-        x - 6,
-        y - 4,
-        4,
+    render.options.height =
+        h;
+
+
+    const ratio =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+
+    render.canvas.width =
+        w * ratio;
+
+    render.canvas.height =
+        h * ratio;
+
+
+    render.canvas.style.width =
+        w + "px";
+
+    render.canvas.style.height =
+        h + "px";
+
+
+    render.context.setTransform(
+        ratio,
         0,
-        Math.PI * 2
+        0,
+        ratio,
+        0,
+        0
     );
-
-    ctx.arc(
-        x + 6,
-        y - 4,
-        4,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    ctx.fillStyle =
-        "#172b16";
-
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x - 6,
-        y - 4,
-        1.5,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.arc(
-        x + 6,
-        y - 4,
-        1.5,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    /*
-       Nose
-    */
-
-    ctx.fillStyle =
-        "#69a957";
-
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        x,
-        y + 6,
-        8,
-        5,
-        0,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
 }
 
 
-/* =====================================
-   RESIZE
-===================================== */
+/* =========================================
+   ORIENTATION
+========================================= */
+
+function checkOrientation() {
+
+    /*
+       Don't rely only on CSS
+       orientation queries.
+
+       This directly checks the
+       actual viewport dimensions.
+    */
+
+    const portrait =
+        window.innerHeight >
+        window.innerWidth;
+
+
+    if (
+        portrait
+    ) {
+
+        rotateScreen.style.display =
+            "flex";
+
+        document.body.classList.add(
+            "portrait"
+        );
+
+    } else {
+
+        rotateScreen.style.display =
+            "none";
+
+        document.body.classList.remove(
+            "portrait"
+        );
+    }
+}
+
 
 window.addEventListener(
     "resize",
     () => {
 
-        render.options.width =
-            container.clientWidth;
+        checkOrientation();
 
-        render.options.height =
-            container.clientHeight;
-
-        render.canvas.width =
-            container.clientWidth *
-            Math.min(
-                window.devicePixelRatio || 1,
-                2
-            );
-
-        render.canvas.height =
-            container.clientHeight *
-            Math.min(
-                window.devicePixelRatio || 1,
-                2
-            );
+        resizeGame();
     }
 );
 
 
-/* =====================================
+window.addEventListener(
+    "orientationchange",
+    () => {
+
+        setTimeout(
+            () => {
+
+                checkOrientation();
+
+                resizeGame();
+
+            },
+            150
+        );
+    }
+);
+
+
+/* =========================================
    START
-===================================== */
+========================================= */
+
+checkOrientation();
+
+resizeGame();
 
 buildLevel();
