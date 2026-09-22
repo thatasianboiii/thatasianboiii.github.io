@@ -1,1 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <meta name="theme-color" content="#16251b">
+
+    <title>Angry Birds — The Asian Boy</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<main id="game">
+
+    <header class="topbar">
+
+        <button id="homeBtn" class="top-button">
+            ← Home
+        </button>
+
+        <div class="title">
+            ANGRY BIRDS
+        </div>
+
+        <div class="score-box">
+            <span>SCORE</span>
+            <strong id="score">0</strong>
+        </div>
+
+    </header>
+
+
+    <div id="game-container">
+
+        <canvas id="gameCanvas"></canvas>
+
+
+        <!-- SLINGSHOT AIMING GUIDE -->
+
+        <div id="power">
+            <div class="power-label">POWER</div>
+
+            <div class="power-bar">
+                <div id="powerFill"></div>
+            </div>
+        </div>
+
+
+        <!-- LEVEL MESSAGE -->
+
+        <div id="message" class="hidden">
+
+            <div class="message-box">
+
+                <h1 id="messageTitle">
+                    LEVEL COMPLETE
+                </h1>
+
+                <p id="messageText">
+                    Nice shot.
+                </p>
+
+                <button id="nextBtn" class="main-button">
+                    NEXT LEVEL
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- HELP -->
+
+        <div id="help">
+
+            <div class="help-box">
+
+                <strong>HOW TO PLAY</strong>
+
+                <p>
+                    Drag the bird backwards,
+                    aim, then release.
+                </p>
+
+                <button id="closeHelp">
+                    GOT IT
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <footer class="bottom-bar">
+
+        <div class="birds">
+
+            <span class="birds-label">
+                BIRDS
+            </span>
+
+            <div id="birdCount">
+                ● ● ●
+            </div>
+
+        </div>
+
+        <button id="restartBtn" class="bottom-button">
+            ↻ Restart
+        </button>
+
+        <button id="helpBtn" class="bottom-button">
+            ?
+        </button>
+
+    </footer>
+
+</main>
+
+
+<!-- Matter.js -->
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js">
+</script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
