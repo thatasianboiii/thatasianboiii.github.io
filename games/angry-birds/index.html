@@ -2,69 +2,112 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        content="width=device-width,
+                 initial-scale=1.0,
+                 maximum-scale=1.0,
+                 user-scalable=no"
     >
 
-    <meta name="theme-color" content="#16251b">
+    <meta name="theme-color" content="#142018">
 
     <title>Angry Birds — The Asian Boy</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
+
+<!-- ROTATE SCREEN -->
+
 <div id="rotateScreen">
-    <div class="rotate-icon">⟳</div>
-    <strong>ROTATE YOUR PHONE</strong>
-    <span>Angry Birds is designed for landscape mode.</span>
+
+    <div class="rotate-symbol">
+        ↻
+    </div>
+
+    <div class="rotate-title">
+        ROTATE YOUR PHONE
+    </div>
+
+    <div class="rotate-text">
+        Turn your phone sideways to play Angry Birds.
+    </div>
+
 </div>
 
 
+<!-- GAME -->
+
 <main id="game">
+
+
+    <!-- TOP -->
 
     <header class="topbar">
 
-        <button id="homeBtn" class="top-button">
+        <button id="homeBtn">
             ← Home
         </button>
 
-        <div class="title">
+        <div class="gameTitle">
             ANGRY BIRDS
         </div>
 
-        <div class="score-box">
-            <span>SCORE</span>
-            <strong id="score">0</strong>
+        <div class="score">
+
+            <span>
+                SCORE
+            </span>
+
+            <strong id="score">
+                0
+            </strong>
+
         </div>
 
     </header>
 
 
-    <div id="game-container">
+    <!-- CANVAS -->
+
+    <section id="gameArea">
 
         <canvas id="gameCanvas"></canvas>
 
+
+        <!-- POWER -->
+
         <div id="power">
 
-            <div class="power-label">
+            <div class="powerText">
                 POWER
             </div>
 
-            <div class="power-bar">
+            <div class="powerTrack">
+
                 <div id="powerFill"></div>
+
             </div>
 
         </div>
 
 
-        <div id="message" class="hidden">
+        <!-- MESSAGE -->
 
-            <div class="message-box">
+        <div
+            id="message"
+            class="hidden"
+        >
+
+            <div class="messageBox">
 
                 <h1 id="messageTitle">
                     LEVEL COMPLETE
@@ -74,10 +117,7 @@
                     Nice shot.
                 </p>
 
-                <button
-                    id="nextBtn"
-                    class="main-button"
-                >
+                <button id="nextBtn">
                     NEXT LEVEL
                 </button>
 
@@ -85,68 +125,47 @@
 
         </div>
 
-
-        <div id="help">
-
-            <div class="help-box">
-
-                <strong>
-                    HOW TO PLAY
-                </strong>
-
-                <p>
-                    Drag the bird backwards,
-                    aim at the targets,
-                    then release.
-                </p>
-
-                <button id="closeHelp">
-                    GOT IT
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
+    </section>
 
 
-    <footer class="bottom-bar">
+    <!-- BOTTOM -->
 
-        <div class="birds">
+    <footer class="bottomBar">
 
-            <span class="birds-label">
+        <div class="birdCounter">
+
+            <span>
                 BIRDS
             </span>
 
-            <div id="birdCount">
+            <strong id="birdCount">
                 ● ● ●
-            </div>
+            </strong>
 
         </div>
 
-        <button
-            id="restartBtn"
-            class="bottom-button"
-        >
+
+        <button id="restartBtn">
             ↻ Restart
         </button>
 
-        <button
-            id="helpBtn"
-            class="bottom-button"
-        >
+
+        <button id="helpBtn">
             ?
         </button>
 
     </footer>
 
+
 </main>
 
+
+<!-- MATTER.JS -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js"></script>
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
