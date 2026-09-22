@@ -1,10 +1,16 @@
 * {
+
     box-sizing: border-box;
 
+    margin: 0;
+    padding: 0;
+
     -webkit-tap-highlight-color: transparent;
+
     -webkit-user-select: none;
     user-select: none;
 }
+
 
 html,
 body {
@@ -12,12 +18,9 @@ body {
     width: 100%;
     height: 100%;
 
-    margin: 0;
-    padding: 0;
-
     overflow: hidden;
 
-    background: #16251b;
+    background: #142018;
 
     font-family:
         Arial,
@@ -25,36 +28,26 @@ body {
         sans-serif;
 }
 
+
 body {
 
-    display: flex;
-
-    justify-content: center;
-}
-
-button {
-
-    border: 0;
-
-    font: inherit;
-
-    cursor: pointer;
+    touch-action: none;
 }
 
 
-/* =====================================
+/* ===============================
    ROTATE SCREEN
-===================================== */
+================================ */
 
 #rotateScreen {
-
-    display: none;
 
     position: fixed;
 
     inset: 0;
 
-    z-index: 9999;
+    z-index: 99999;
+
+    display: none;
 
     align-items: center;
     justify-content: center;
@@ -70,26 +63,40 @@ button {
     color: white;
 
     background:
-        #102016;
+        linear-gradient(
+            145deg,
+            #142018,
+            #203c29
+        );
 }
 
-.rotate-icon {
 
-    font-size: 48px;
+.rotate-symbol {
+
+    font-size: 58px;
 
     line-height: 1;
+
+    animation:
+        rotatePhone 1.8s
+        ease-in-out
+        infinite;
 }
 
-#rotateScreen strong {
 
-    font-size: 16px;
+.rotate-title {
 
-    letter-spacing: 1px;
+    font-size: 17px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
 }
 
-#rotateScreen span {
 
-    max-width: 250px;
+.rotate-text {
+
+    max-width: 270px;
 
     color:
         rgba(255,255,255,0.55);
@@ -100,14 +107,33 @@ button {
 }
 
 
-/* =====================================
-   MAIN GAME
-===================================== */
+@keyframes rotatePhone {
+
+    0% {
+        transform: rotate(0deg);
+    }
+
+    45% {
+        transform: rotate(90deg);
+    }
+
+    70% {
+        transform: rotate(90deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
+/* ===============================
+   GAME
+================================ */
 
 #game {
 
     width: 100%;
-
     height: 100dvh;
 
     display: flex;
@@ -117,19 +143,13 @@ button {
     overflow: hidden;
 
     background:
-        linear-gradient(
-            180deg,
-            #82c9df 0%,
-            #b8dfdc 58%,
-            #86b96d 58.1%,
-            #4e8b4d 100%
-        );
+        #83c7da;
 }
 
 
-/* =====================================
+/* ===============================
    TOP BAR
-===================================== */
+================================ */
 
 .topbar {
 
@@ -146,47 +166,49 @@ button {
     padding:
         0 12px;
 
+    color: white;
+
     background:
-        rgba(10,25,15,0.93);
+        rgba(12,27,17,0.96);
 
     border-bottom:
         1px solid
-        rgba(255,255,255,0.12);
+        rgba(255,255,255,0.1);
 
-    color: white;
-
-    z-index: 20;
+    z-index: 50;
 }
 
-.top-button {
+
+#homeBtn {
 
     height: 32px;
 
     padding:
         0 12px;
 
+    border: 1px solid
+        rgba(255,255,255,0.12);
+
     border-radius: 9px;
 
-    color: #eaf5eb;
+    color: white;
 
     background:
-        rgba(255,255,255,0.1);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.12);
+        rgba(255,255,255,0.09);
 
     font-size: 10px;
 
     font-weight: 800;
 }
 
-.top-button:active {
 
-    transform: scale(0.93);
+#homeBtn:active {
+
+    transform: scale(0.94);
 }
 
-.title {
+
+.gameTitle {
 
     font-size: 12px;
 
@@ -195,19 +217,21 @@ button {
     letter-spacing: 2px;
 }
 
-.score-box {
 
-    min-width: 60px;
+.score {
+
+    width: 65px;
 
     text-align: right;
 }
 
-.score-box span {
+
+.score span {
 
     display: block;
 
     color:
-        rgba(255,255,255,0.5);
+        rgba(255,255,255,0.45);
 
     font-size: 6px;
 
@@ -216,17 +240,18 @@ button {
     letter-spacing: 1px;
 }
 
-.score-box strong {
+
+.score strong {
 
     font-size: 15px;
 }
 
 
-/* =====================================
+/* ===============================
    GAME AREA
-===================================== */
+================================ */
 
-#game-container {
+#gameArea {
 
     position: relative;
 
@@ -236,59 +261,75 @@ button {
 
     overflow: hidden;
 
-    touch-action: none;
+    background:
+        linear-gradient(
+            180deg,
+            #82c9df 0%,
+            #c3e1dd 67%,
+            #9bc87d 67%,
+            #609657 100%
+        );
 }
 
+
 #gameCanvas {
+
+    position: absolute;
+
+    inset: 0;
 
     display: block;
 
     width: 100%;
     height: 100%;
+
+    touch-action: none;
 }
 
 
-/* =====================================
+/* ===============================
    POWER
-===================================== */
+================================ */
 
 #power {
 
     position: absolute;
 
-    left: 12px;
-    top: 12px;
+    left: 14px;
+    top: 14px;
 
-    width: 110px;
+    width: 115px;
 
     padding: 7px;
+
+    opacity: 0;
+
+    pointer-events: none;
 
     border-radius: 9px;
 
     background:
-        rgba(10,30,15,0.4);
+        rgba(15,35,20,0.45);
 
     backdrop-filter: blur(5px);
-
-    pointer-events: none;
-
-    opacity: 0;
 
     transition:
         opacity 0.15s ease;
 }
+
 
 #power.visible {
 
     opacity: 1;
 }
 
-.power-label {
+
+.powerText {
 
     margin-bottom: 4px;
 
     color:
-        rgba(255,255,255,0.7);
+        rgba(255,255,255,0.75);
 
     font-size: 6px;
 
@@ -297,9 +338,8 @@ button {
     letter-spacing: 1px;
 }
 
-.power-bar {
 
-    width: 100%;
+.powerTrack {
 
     height: 5px;
 
@@ -308,8 +348,9 @@ button {
     border-radius: 10px;
 
     background:
-        rgba(255,255,255,0.18);
+        rgba(255,255,255,0.2);
 }
+
 
 #powerFill {
 
@@ -323,92 +364,9 @@ button {
 }
 
 
-/* =====================================
-   BOTTOM BAR
-===================================== */
-
-.bottom-bar {
-
-    height: 58px;
-
-    min-height: 58px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding:
-        0 12px;
-
-    background:
-        rgba(10,25,15,0.94);
-
-    border-top:
-        1px solid
-        rgba(255,255,255,0.1);
-
-    z-index: 20;
-}
-
-.birds-label {
-
-    display: block;
-
-    margin-bottom: 2px;
-
-    color:
-        rgba(255,255,255,0.45);
-
-    font-size: 6px;
-
-    font-weight: 900;
-
-    letter-spacing: 1px;
-}
-
-#birdCount {
-
-    color: white;
-
-    font-size: 15px;
-
-    letter-spacing: 3px;
-}
-
-.bottom-button {
-
-    height: 35px;
-
-    padding:
-        0 14px;
-
-    border-radius: 10px;
-
-    color: #e9f5ea;
-
-    background:
-        rgba(255,255,255,0.1);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.12);
-
-    font-size: 9px;
-
-    font-weight: 900;
-}
-
-.bottom-button:active {
-
-    transform: scale(0.92);
-}
-
-
-/* =====================================
+/* ===============================
    MESSAGE
-===================================== */
+================================ */
 
 #message {
 
@@ -429,14 +387,16 @@ button {
     backdrop-filter: blur(5px);
 }
 
+
 #message.hidden {
 
     display: none;
 }
 
-.message-box {
 
-    width: min(300px, 80%);
+.messageBox {
+
+    width: min(310px, 80%);
 
     padding: 24px 20px;
 
@@ -444,30 +404,30 @@ button {
 
     border-radius: 18px;
 
+    color: white;
+
     background:
-        rgba(14,32,19,0.97);
+        rgba(15,32,19,0.97);
 
     border:
         1px solid
-        rgba(255,255,255,0.14);
-
-    color: white;
+        rgba(255,255,255,0.13);
 }
 
-.message-box h1 {
 
-    margin:
-        0 0 8px;
+.messageBox h1 {
+
+    margin-bottom: 8px;
 
     font-size: 21px;
 
     letter-spacing: 1px;
 }
 
-.message-box p {
 
-    margin:
-        0 0 18px;
+.messageBox p {
+
+    margin-bottom: 18px;
 
     color:
         rgba(255,255,255,0.6);
@@ -475,113 +435,147 @@ button {
     font-size: 10px;
 }
 
-.main-button {
+
+#nextBtn {
 
     width: 100%;
 
     height: 42px;
 
+    border: 0;
+
     border-radius: 11px;
 
-    background: #d7ebce;
-
     color: #102416;
+
+    background: #d8ebcf;
 
     font-size: 10px;
 
     font-weight: 900;
 }
 
-.main-button:active {
+
+#nextBtn:active {
 
     transform: scale(0.96);
 }
 
 
-/* =====================================
-   HELP
-===================================== */
+/* ===============================
+   BOTTOM BAR
+================================ */
 
-#help {
+.bottomBar {
 
-    position: absolute;
+    height: 58px;
 
-    inset: 0;
-
-    z-index: 150;
+    min-height: 58px;
 
     display: flex;
 
     align-items: center;
-    justify-content: center;
 
-    background:
-        rgba(0,0,0,0.4);
+    justify-content: space-between;
 
-    backdrop-filter: blur(5px);
-}
-
-.help-box {
-
-    width: min(290px,80%);
-
-    padding: 22px 18px;
-
-    text-align: center;
-
-    border-radius: 17px;
-
-    background:
-        rgba(14,32,19,0.97);
+    padding:
+        0 12px;
 
     color: white;
+
+    background:
+        rgba(12,27,17,0.97);
+
+    border-top:
+        1px solid
+        rgba(255,255,255,0.1);
+
+    z-index: 50;
 }
 
-.help-box strong {
 
-    font-size: 15px;
+.birdCounter span {
+
+    display: block;
+
+    margin-bottom: 2px;
+
+    color:
+        rgba(255,255,255,0.45);
+
+    font-size: 6px;
+
+    font-weight: 900;
 
     letter-spacing: 1px;
 }
 
-.help-box p {
 
-    margin:
-        11px 0 17px;
+.birdCounter strong {
 
-    color:
-        rgba(255,255,255,0.6);
+    font-size: 14px;
 
-    font-size: 10px;
-
-    line-height: 1.5;
+    letter-spacing: 2px;
 }
 
-#closeHelp {
 
-    width: 100%;
+#restartBtn,
+#helpBtn {
 
-    height: 39px;
+    height: 35px;
+
+    border: 1px solid
+        rgba(255,255,255,0.12);
 
     border-radius: 10px;
 
-    background: #d7ebce;
+    color: white;
 
-    color: #102416;
+    background:
+        rgba(255,255,255,0.09);
 
-    font-size: 10px;
+    font-size: 9px;
 
     font-weight: 900;
 }
 
 
-/* =====================================
-   PORTRAIT PHONE
-===================================== */
+#restartBtn {
+
+    padding:
+        0 14px;
+}
+
+
+#helpBtn {
+
+    width: 35px;
+
+    font-size: 14px;
+}
+
+
+#restartBtn:active,
+#helpBtn:active {
+
+    transform: scale(0.92);
+}
+
+
+/* ===============================
+   PORTRAIT
+================================ */
+
+/*
+   CSS fallback.
+   JavaScript also controls this,
+   because some mobile browsers don't
+   reliably update orientation media
+   queries when the address bar changes.
+*/
 
 @media
-    (orientation: portrait)
-    and (max-width: 900px) {
+    (orientation: portrait) {
 
     #game {
 
