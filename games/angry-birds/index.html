@@ -18,6 +18,13 @@
 
 <body>
 
+<div id="rotateScreen">
+    <div class="rotate-icon">⟳</div>
+    <strong>ROTATE YOUR PHONE</strong>
+    <span>Angry Birds is designed for landscape mode.</span>
+</div>
+
+
 <main id="game">
 
     <header class="topbar">
@@ -42,19 +49,18 @@
 
         <canvas id="gameCanvas"></canvas>
 
-
-        <!-- SLINGSHOT AIMING GUIDE -->
-
         <div id="power">
-            <div class="power-label">POWER</div>
+
+            <div class="power-label">
+                POWER
+            </div>
 
             <div class="power-bar">
                 <div id="powerFill"></div>
             </div>
+
         </div>
 
-
-        <!-- LEVEL MESSAGE -->
 
         <div id="message" class="hidden">
 
@@ -68,7 +74,10 @@
                     Nice shot.
                 </p>
 
-                <button id="nextBtn" class="main-button">
+                <button
+                    id="nextBtn"
+                    class="main-button"
+                >
                     NEXT LEVEL
                 </button>
 
@@ -77,17 +86,18 @@
         </div>
 
 
-        <!-- HELP -->
-
         <div id="help">
 
             <div class="help-box">
 
-                <strong>HOW TO PLAY</strong>
+                <strong>
+                    HOW TO PLAY
+                </strong>
 
                 <p>
                     Drag the bird backwards,
-                    aim, then release.
+                    aim at the targets,
+                    then release.
                 </p>
 
                 <button id="closeHelp">
@@ -115,11 +125,17 @@
 
         </div>
 
-        <button id="restartBtn" class="bottom-button">
+        <button
+            id="restartBtn"
+            class="bottom-button"
+        >
             ↻ Restart
         </button>
 
-        <button id="helpBtn" class="bottom-button">
+        <button
+            id="helpBtn"
+            class="bottom-button"
+        >
             ?
         </button>
 
@@ -128,11 +144,7 @@
 </main>
 
 
-<!-- Matter.js -->
-
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js">
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js"></script>
 
 <script src="script.js"></script>
 
