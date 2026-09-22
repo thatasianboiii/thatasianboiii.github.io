@@ -8,6 +8,7 @@
 
 html,
 body {
+
     width: 100%;
     height: 100%;
 
@@ -25,29 +26,92 @@ body {
 }
 
 body {
+
     display: flex;
+
     justify-content: center;
 }
 
 button {
+
     border: 0;
+
     font: inherit;
+
     cursor: pointer;
 }
 
 
 /* =====================================
-   GAME
+   ROTATE SCREEN
+===================================== */
+
+#rotateScreen {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    color: white;
+
+    background:
+        #102016;
+}
+
+.rotate-icon {
+
+    font-size: 48px;
+
+    line-height: 1;
+}
+
+#rotateScreen strong {
+
+    font-size: 16px;
+
+    letter-spacing: 1px;
+}
+
+#rotateScreen span {
+
+    max-width: 250px;
+
+    color:
+        rgba(255,255,255,0.55);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================
+   MAIN GAME
 ===================================== */
 
 #game {
 
     width: 100%;
-    max-width: 700px;
 
     height: 100dvh;
 
     display: flex;
+
     flex-direction: column;
 
     overflow: hidden;
@@ -55,9 +119,9 @@ button {
     background:
         linear-gradient(
             180deg,
-            #81c8df 0%,
-            #b7dfdc 48%,
-            #86b96d 49%,
+            #82c9df 0%,
+            #b8dfdc 58%,
+            #86b96d 58.1%,
             #4e8b4d 100%
         );
 }
@@ -69,21 +133,25 @@ button {
 
 .topbar {
 
-    height: 52px;
-    min-height: 52px;
+    height: 48px;
+
+    min-height: 48px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    padding: 0 10px;
+    padding:
+        0 12px;
 
     background:
-        rgba(10, 25, 15, 0.92);
+        rgba(10,25,15,0.93);
 
     border-bottom:
         1px solid
-        rgba(255, 255, 255, 0.12);
+        rgba(255,255,255,0.12);
 
     color: white;
 
@@ -92,27 +160,29 @@ button {
 
 .top-button {
 
-    height: 34px;
+    height: 32px;
 
-    padding: 0 11px;
+    padding:
+        0 12px;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
     color: #eaf5eb;
 
     background:
-        rgba(255, 255, 255, 0.1);
+        rgba(255,255,255,0.1);
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.12);
+        rgba(255,255,255,0.12);
 
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: 800;
 }
 
 .top-button:active {
+
     transform: scale(0.93);
 }
 
@@ -127,7 +197,7 @@ button {
 
 .score-box {
 
-    min-width: 55px;
+    min-width: 60px;
 
     text-align: right;
 }
@@ -137,7 +207,7 @@ button {
     display: block;
 
     color:
-        rgba(255, 255, 255, 0.55);
+        rgba(255,255,255,0.5);
 
     font-size: 6px;
 
@@ -171,10 +241,10 @@ button {
 
 #gameCanvas {
 
+    display: block;
+
     width: 100%;
     height: 100%;
-
-    display: block;
 }
 
 
@@ -189,14 +259,14 @@ button {
     left: 12px;
     top: 12px;
 
-    width: 100px;
+    width: 110px;
 
     padding: 7px;
 
     border-radius: 9px;
 
     background:
-        rgba(10, 30, 15, 0.42);
+        rgba(10,30,15,0.4);
 
     backdrop-filter: blur(5px);
 
@@ -209,6 +279,7 @@ button {
 }
 
 #power.visible {
+
     opacity: 1;
 }
 
@@ -217,7 +288,7 @@ button {
     margin-bottom: 4px;
 
     color:
-        rgba(255, 255, 255, 0.7);
+        rgba(255,255,255,0.7);
 
     font-size: 6px;
 
@@ -229,6 +300,7 @@ button {
 .power-bar {
 
     width: 100%;
+
     height: 5px;
 
     overflow: hidden;
@@ -236,19 +308,18 @@ button {
     border-radius: 10px;
 
     background:
-        rgba(255, 255, 255, 0.18);
+        rgba(255,255,255,0.18);
 }
 
 #powerFill {
 
     width: 0%;
+
     height: 100%;
 
     border-radius: inherit;
 
     background: white;
-
-    transition: width 0.04s linear;
 }
 
 
@@ -258,8 +329,9 @@ button {
 
 .bottom-bar {
 
-    height: 65px;
-    min-height: 65px;
+    height: 58px;
+
+    min-height: 58px;
 
     display: flex;
 
@@ -268,15 +340,14 @@ button {
     justify-content: space-between;
 
     padding:
-        0
-        12px;
+        0 12px;
 
     background:
-        rgba(10, 25, 15, 0.94);
+        rgba(10,25,15,0.94);
 
     border-top:
         1px solid
-        rgba(255, 255, 255, 0.1);
+        rgba(255,255,255,0.1);
 
     z-index: 20;
 }
@@ -285,10 +356,10 @@ button {
 
     display: block;
 
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 
     color:
-        rgba(255, 255, 255, 0.45);
+        rgba(255,255,255,0.45);
 
     font-size: 6px;
 
@@ -301,36 +372,36 @@ button {
 
     color: white;
 
-    font-size: 16px;
+    font-size: 15px;
 
     letter-spacing: 3px;
-
-    white-space: nowrap;
 }
 
 .bottom-button {
 
-    height: 38px;
+    height: 35px;
 
-    padding: 0 14px;
+    padding:
+        0 14px;
 
-    border-radius: 11px;
+    border-radius: 10px;
 
     color: #e9f5ea;
 
     background:
-        rgba(255, 255, 255, 0.1);
+        rgba(255,255,255,0.1);
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.12);
+        rgba(255,255,255,0.12);
 
-    font-size: 10px;
+    font-size: 9px;
 
     font-weight: 900;
 }
 
 .bottom-button:active {
+
     transform: scale(0.92);
 }
 
@@ -352,41 +423,33 @@ button {
     align-items: center;
     justify-content: center;
 
-    padding: 25px;
-
     background:
-        rgba(5, 20, 10, 0.42);
+        rgba(5,20,10,0.4);
 
     backdrop-filter: blur(5px);
 }
 
 #message.hidden {
+
     display: none;
 }
 
 .message-box {
 
-    width: min(
-        300px,
-        90%
-    );
+    width: min(300px, 80%);
 
-    padding: 25px 20px;
+    padding: 24px 20px;
 
     text-align: center;
 
     border-radius: 18px;
 
     background:
-        rgba(14, 32, 19, 0.96);
+        rgba(14,32,19,0.97);
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.14);
-
-    box-shadow:
-        0 20px 50px
-        rgba(0, 0, 0, 0.35);
+        rgba(255,255,255,0.14);
 
     color: white;
 }
@@ -396,7 +459,7 @@ button {
     margin:
         0 0 8px;
 
-    font-size: 22px;
+    font-size: 21px;
 
     letter-spacing: 1px;
 }
@@ -404,32 +467,33 @@ button {
 .message-box p {
 
     margin:
-        0 0 20px;
+        0 0 18px;
 
     color:
-        rgba(255, 255, 255, 0.62);
+        rgba(255,255,255,0.6);
 
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .main-button {
 
     width: 100%;
 
-    height: 44px;
+    height: 42px;
 
-    border-radius: 12px;
+    border-radius: 11px;
 
     background: #d7ebce;
 
     color: #102416;
 
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: 900;
 }
 
 .main-button:active {
+
     transform: scale(0.96);
 }
 
@@ -451,36 +515,31 @@ button {
     align-items: center;
     justify-content: center;
 
-    padding: 25px;
-
     background:
-        rgba(0, 0, 0, 0.4);
+        rgba(0,0,0,0.4);
 
     backdrop-filter: blur(5px);
 }
 
 .help-box {
 
-    width: min(
-        290px,
-        90%
-    );
+    width: min(290px,80%);
 
-    padding: 23px 18px;
+    padding: 22px 18px;
 
     text-align: center;
 
     border-radius: 17px;
 
     background:
-        rgba(14, 32, 19, 0.97);
+        rgba(14,32,19,0.97);
 
     color: white;
 }
 
 .help-box strong {
 
-    font-size: 16px;
+    font-size: 15px;
 
     letter-spacing: 1px;
 }
@@ -488,12 +547,12 @@ button {
 .help-box p {
 
     margin:
-        12px 0 18px;
+        11px 0 17px;
 
     color:
-        rgba(255, 255, 255, 0.62);
+        rgba(255,255,255,0.6);
 
-    font-size: 11px;
+    font-size: 10px;
 
     line-height: 1.5;
 }
@@ -502,7 +561,7 @@ button {
 
     width: 100%;
 
-    height: 40px;
+    height: 39px;
 
     border-radius: 10px;
 
@@ -517,20 +576,20 @@ button {
 
 
 /* =====================================
-   PHONE
+   PORTRAIT PHONE
 ===================================== */
 
-@media (max-height: 650px) {
+@media
+    (orientation: portrait)
+    and (max-width: 900px) {
 
-    .topbar {
+    #game {
 
-        height: 47px;
-        min-height: 47px;
+        display: none;
     }
 
-    .bottom-bar {
+    #rotateScreen {
 
-        height: 57px;
-        min-height: 57px;
+        display: flex;
     }
 }
