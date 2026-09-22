@@ -1,0 +1,536 @@
+* {
+    box-sizing: border-box;
+
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background: #16251b;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+
+/* =====================================
+   GAME
+===================================== */
+
+#game {
+
+    width: 100%;
+    max-width: 700px;
+
+    height: 100dvh;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            #81c8df 0%,
+            #b7dfdc 48%,
+            #86b96d 49%,
+            #4e8b4d 100%
+        );
+}
+
+
+/* =====================================
+   TOP BAR
+===================================== */
+
+.topbar {
+
+    height: 52px;
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 10px;
+
+    background:
+        rgba(10, 25, 15, 0.92);
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    color: white;
+
+    z-index: 20;
+}
+
+.top-button {
+
+    height: 34px;
+
+    padding: 0 11px;
+
+    border-radius: 10px;
+
+    color: #eaf5eb;
+
+    background:
+        rgba(255, 255, 255, 0.1);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+.top-button:active {
+    transform: scale(0.93);
+}
+
+.title {
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+.score-box {
+
+    min-width: 55px;
+
+    text-align: right;
+}
+
+.score-box span {
+
+    display: block;
+
+    color:
+        rgba(255, 255, 255, 0.55);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.score-box strong {
+
+    font-size: 15px;
+}
+
+
+/* =====================================
+   GAME AREA
+===================================== */
+
+#game-container {
+
+    position: relative;
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    touch-action: none;
+}
+
+#gameCanvas {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+}
+
+
+/* =====================================
+   POWER
+===================================== */
+
+#power {
+
+    position: absolute;
+
+    left: 12px;
+    top: 12px;
+
+    width: 100px;
+
+    padding: 7px;
+
+    border-radius: 9px;
+
+    background:
+        rgba(10, 30, 15, 0.42);
+
+    backdrop-filter: blur(5px);
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transition:
+        opacity 0.15s ease;
+}
+
+#power.visible {
+    opacity: 1;
+}
+
+.power-label {
+
+    margin-bottom: 4px;
+
+    color:
+        rgba(255, 255, 255, 0.7);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.power-bar {
+
+    width: 100%;
+    height: 5px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 255, 255, 0.18);
+}
+
+#powerFill {
+
+    width: 0%;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: white;
+
+    transition: width 0.04s linear;
+}
+
+
+/* =====================================
+   BOTTOM BAR
+===================================== */
+
+.bottom-bar {
+
+    height: 65px;
+    min-height: 65px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        0
+        12px;
+
+    background:
+        rgba(10, 25, 15, 0.94);
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.1);
+
+    z-index: 20;
+}
+
+.birds-label {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color:
+        rgba(255, 255, 255, 0.45);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+#birdCount {
+
+    color: white;
+
+    font-size: 16px;
+
+    letter-spacing: 3px;
+
+    white-space: nowrap;
+}
+
+.bottom-button {
+
+    height: 38px;
+
+    padding: 0 14px;
+
+    border-radius: 11px;
+
+    color: #e9f5ea;
+
+    background:
+        rgba(255, 255, 255, 0.1);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    font-size: 10px;
+
+    font-weight: 900;
+}
+
+.bottom-button:active {
+    transform: scale(0.92);
+}
+
+
+/* =====================================
+   MESSAGE
+===================================== */
+
+#message {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 100;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    background:
+        rgba(5, 20, 10, 0.42);
+
+    backdrop-filter: blur(5px);
+}
+
+#message.hidden {
+    display: none;
+}
+
+.message-box {
+
+    width: min(
+        300px,
+        90%
+    );
+
+    padding: 25px 20px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    background:
+        rgba(14, 32, 19, 0.96);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.14);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.35);
+
+    color: white;
+}
+
+.message-box h1 {
+
+    margin:
+        0 0 8px;
+
+    font-size: 22px;
+
+    letter-spacing: 1px;
+}
+
+.message-box p {
+
+    margin:
+        0 0 20px;
+
+    color:
+        rgba(255, 255, 255, 0.62);
+
+    font-size: 11px;
+}
+
+.main-button {
+
+    width: 100%;
+
+    height: 44px;
+
+    border-radius: 12px;
+
+    background: #d7ebce;
+
+    color: #102416;
+
+    font-size: 11px;
+
+    font-weight: 900;
+}
+
+.main-button:active {
+    transform: scale(0.96);
+}
+
+
+/* =====================================
+   HELP
+===================================== */
+
+#help {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 150;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    background:
+        rgba(0, 0, 0, 0.4);
+
+    backdrop-filter: blur(5px);
+}
+
+.help-box {
+
+    width: min(
+        290px,
+        90%
+    );
+
+    padding: 23px 18px;
+
+    text-align: center;
+
+    border-radius: 17px;
+
+    background:
+        rgba(14, 32, 19, 0.97);
+
+    color: white;
+}
+
+.help-box strong {
+
+    font-size: 16px;
+
+    letter-spacing: 1px;
+}
+
+.help-box p {
+
+    margin:
+        12px 0 18px;
+
+    color:
+        rgba(255, 255, 255, 0.62);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+#closeHelp {
+
+    width: 100%;
+
+    height: 40px;
+
+    border-radius: 10px;
+
+    background: #d7ebce;
+
+    color: #102416;
+
+    font-size: 10px;
+
+    font-weight: 900;
+}
+
+
+/* =====================================
+   PHONE
+===================================== */
+
+@media (max-height: 650px) {
+
+    .topbar {
+
+        height: 47px;
+        min-height: 47px;
+    }
+
+    .bottom-bar {
+
+        height: 57px;
+        min-height: 57px;
+    }
+}
