@@ -1,8 +1,3 @@
-/* =========================================
-   ANGRY BIRDS
-   Mobile physics game
-========================================= */
-
 const {
     Engine,
     Render,
@@ -16,82 +11,116 @@ const {
 } = Matter;
 
 
-/* =========================================
+/* =====================================
    ELEMENTS
-========================================= */
+===================================== */
 
-const canvas = document.getElementById("gameCanvas");
-const container = document.getElementById("game-container");
+const canvas =
+    document.getElementById("gameCanvas");
 
-const scoreElement = document.getElementById("score");
-const birdCountElement = document.getElementById("birdCount");
+const container =
+    document.getElementById("game-container");
 
-const powerElement = document.getElementById("power");
-const powerFill = document.getElementById("powerFill");
+const scoreElement =
+    document.getElementById("score");
 
-const message = document.getElementById("message");
-const messageTitle = document.getElementById("messageTitle");
-const messageText = document.getElementById("messageText");
-const nextBtn = document.getElementById("nextBtn");
+const birdCountElement =
+    document.getElementById("birdCount");
 
-const restartBtn = document.getElementById("restartBtn");
+const powerElement =
+    document.getElementById("power");
 
-const help = document.getElementById("help");
-const helpBtn = document.getElementById("helpBtn");
-const closeHelp = document.getElementById("closeHelp");
+const powerFill =
+    document.getElementById("powerFill");
 
-const homeBtn = document.getElementById("homeBtn");
+const message =
+    document.getElementById("message");
+
+const messageTitle =
+    document.getElementById("messageTitle");
+
+const messageText =
+    document.getElementById("messageText");
+
+const nextBtn =
+    document.getElementById("nextBtn");
+
+const restartBtn =
+    document.getElementById("restartBtn");
+
+const help =
+    document.getElementById("help");
+
+const helpBtn =
+    document.getElementById("helpBtn");
+
+const closeHelp =
+    document.getElementById("closeHelp");
+
+const homeBtn =
+    document.getElementById("homeBtn");
 
 
-/* =========================================
-   ENGINE
-========================================= */
+/* =====================================
+   MATTER ENGINE
+===================================== */
 
-const engine = Engine.create();
+const engine =
+    Engine.create();
 
-engine.gravity.y = 1;
+engine.gravity.y = 1.05;
 
-const world = engine.world;
+const world =
+    engine.world;
 
 
-/* =========================================
+/* =====================================
    RENDERER
-========================================= */
+===================================== */
 
-const render = Render.create({
+const render =
+    Render.create({
 
-    canvas: canvas,
+        canvas,
 
-    engine: engine,
+        engine,
 
-    options: {
+        options: {
 
-        width: container.clientWidth,
+            width:
+                container.clientWidth,
 
-        height: container.clientHeight,
+            height:
+                container.clientHeight,
 
-        wireframes: false,
+            wireframes: false,
 
-        background: "transparent",
+            background: "transparent",
 
-        pixelRatio: Math.min(
-            window.devicePixelRatio || 1,
-            2
-        )
-    }
-});
+            pixelRatio:
+                Math.min(
+                    window.devicePixelRatio || 1,
+                    2
+                )
+        }
+    });
 
 
 Render.run(render);
 
-const runner = Runner.create();
 
-Runner.run(runner, engine);
+const runner =
+    Runner.create();
+
+Runner.run(
+    runner,
+    engine
+);
 
 
-/* =========================================
-   GAME STATE
-========================================= */
+/* =====================================
+   STATE
+===================================== */
 
 let score = 0;
 
@@ -107,86 +136,97 @@ let dragging = false;
 
 let launched = false;
 
+let levelComplete = false;
+
 let levelObjects = [];
 
 let targetObjects = [];
 
-let birdBodies = [];
-
 let cameraX = 0;
 
-let levelComplete = false;
 
+/* =====================================
+   WORLD DIMENSIONS
+===================================== */
 
-/* =========================================
-   WORLD SIZE
-========================================= */
+function W() {
 
-function worldWidth() {
+    return container.clientWidth;
+}
 
-    return Math.max(
-        1000,
-        container.clientWidth * 2.5
-    );
+function H() {
+
+    return container.clientHeight;
 }
 
 
-/* =========================================
-   CREATE GROUND
-========================================= */
+/* =====================================
+   LEVEL POSITIONS
+===================================== */
+
+function getSlingX() {
+
+    return Math.max(
+        90,
+        W() * 0.15
+    );
+}
+
+function getSlingY() {
+
+    return H() - 95;
+}
+
+function getTargetX() {
+
+    return W() * 0.72;
+}
+
+
+/* =====================================
+   GROUND
+===================================== */
 
 function createGround() {
 
-    const width = worldWidth();
+    const ground =
+        Bodies.rectangle(
 
-    const ground = Bodies.rectangle(
+            W() / 2,
 
-        width / 2,
+            H() + 25,
 
-        container.clientHeight + 30,
+            W() * 2,
 
-        width,
+            50,
 
-        60,
+            {
+                isStatic: true,
 
-        {
-            isStatic: true,
+                label: "ground",
 
-            render: {
-                fillStyle: "#3e713d"
+                render: {
+
+                    fillStyle:
+                        "#4b8048"
+                }
             }
-        }
-    );
-
-    Composite.add(world, ground);
-
-    levelObjects.push(ground);
-}
-
-
-/* =========================================
-   CREATE SLINGSHOT
-========================================= */
-
-let slingX = 130;
-let slingY = 0;
-
-function updateSlingshotPosition() {
-
-    slingX =
-        Math.max(
-            105,
-            container.clientWidth * 0.22
         );
 
-    slingY =
-        container.clientHeight - 105;
+    Composite.add(
+        world,
+        ground
+    );
+
+    levelObjects.push(
+        ground
+    );
 }
 
 
-/* =========================================
-   CREATE BLOCK
-========================================= */
+/* =====================================
+   BLOCK
+===================================== */
 
 function createBlock(
     x,
@@ -200,250 +240,263 @@ function createBlock(
 
         wood: "#a87543",
 
-        stone: "#8e9890",
+        stone: "#858f89",
 
-        glass: "#8fcbd1"
+        glass: "#8bcbd0"
     };
 
-    const block = Bodies.rectangle(
 
-        x,
-        y,
+    const block =
+        Bodies.rectangle(
 
-        width,
-        height,
+            x,
+            y,
 
-        {
-            restitution: 0.15,
+            width,
+            height,
 
-            friction: 0.65,
+            {
+                restitution: 0.15,
 
-            density: 0.003,
+                friction: 0.7,
 
-            label: "block",
+                density: 0.003,
 
-            render: {
-                fillStyle:
-                    colors[type] || colors.wood,
+                label: "block",
 
-                strokeStyle:
-                    "rgba(30,50,30,0.7)",
+                render: {
 
-                lineWidth: 1
+                    fillStyle:
+                        colors[type]
+                }
             }
-        }
+        );
+
+
+    block.blockType =
+        type;
+
+
+    Composite.add(
+        world,
+        block
     );
 
-    block.blockType = type;
-
-    Composite.add(world, block);
-
-    levelObjects.push(block);
+    levelObjects.push(
+        block
+    );
 
     return block;
 }
 
 
-/* =========================================
-   CREATE PIG
-========================================= */
+/* =====================================
+   PIG
+===================================== */
 
-function createPig(x, y) {
+function createPig(
+    x,
+    y,
+    radius = 20
+) {
 
-    const pig = Bodies.circle(
+    const pig =
+        Bodies.circle(
 
-        x,
-        y,
+            x,
+            y,
 
-        19,
+            radius,
 
-        {
-            restitution: 0.25,
+            {
+                restitution: 0.2,
 
-            friction: 0.6,
+                friction: 0.5,
 
-            density: 0.0015,
+                density: 0.0015,
 
-            label: "pig",
+                label: "pig",
 
-            render: {
-                fillStyle: "#83c86b",
+                render: {
 
-                strokeStyle: "#335a31",
+                    fillStyle:
+                        "#82c96b",
 
-                lineWidth: 2
+                    strokeStyle:
+                        "#385d31",
+
+                    lineWidth: 2
+                }
             }
-        }
+        );
+
+
+    Composite.add(
+        world,
+        pig
     );
 
-    targetObjects.push(pig);
-
-    Composite.add(world, pig);
+    targetObjects.push(
+        pig
+    );
 
     return pig;
 }
 
 
-/* =========================================
-   CREATE BIRD
-========================================= */
+/* =====================================
+   BUILD LEVEL
+===================================== */
 
-function createBird() {
-
-    if (birdsLeft <= 0) {
-        return;
-    }
-
-    const bird = Bodies.circle(
-
-        slingX,
-
-        slingY,
-
-        17,
-
-        {
-            isStatic: true,
-
-            restitution: 0.35,
-
-            friction: 0.5,
-
-            density: 0.002,
-
-            label: "bird",
-
-            render: {
-                fillStyle: "#d94235",
-
-                strokeStyle: "#68251f",
-
-                lineWidth: 2
-            }
-        }
-    );
-
-    currentBird = bird;
-
-    birdBodies.push(bird);
-
-    Composite.add(world, bird);
-
-
-    sling = Constraint.create({
-
-        pointA: {
-            x: slingX,
-            y: slingY
-        },
-
-        bodyB: bird,
-
-        stiffness: 0.08,
-
-        damping: 0.02,
-
-        length: 0,
-
-        render: {
-            visible: false
-        }
-    });
-
-    Composite.add(world, sling);
-}
-
-
-/* =========================================
-   LEVEL
-========================================= */
-
-function createLevel() {
+function buildLevel() {
 
     clearLevel();
 
-    updateSlingshotPosition();
+
+    const sx =
+        getSlingX();
+
+    const sy =
+        getSlingY();
+
+
+    /*
+       Ground
+    */
 
     createGround();
 
 
     /*
-       Structure
+       Target tower
+
+       Everything is deliberately
+       placed well inside the visible
+       landscape screen.
     */
 
-    const baseX =
-        Math.max(
-            600,
-            container.clientWidth * 1.35
-        );
+    const tx =
+        getTargetX();
+
+    const groundY =
+        H() - 50;
 
 
-    // bottom blocks
+    /*
+       Bottom foundation
+    */
 
     createBlock(
-        baseX - 80,
-        container.clientHeight - 90,
-        40,
-        100,
+        tx - 80,
+        groundY - 30,
+        38,
+        60,
         "wood"
     );
 
     createBlock(
-        baseX + 80,
-        container.clientHeight - 90,
-        40,
-        100,
+        tx + 80,
+        groundY - 30,
+        38,
+        60,
         "wood"
     );
 
 
-    // upper platform
+    /*
+       Bottom platform
+    */
 
     createBlock(
-        baseX,
-        container.clientHeight - 145,
-        220,
+        tx,
+        groundY - 70,
+        205,
+        28,
+        "wood"
+    );
+
+
+    /*
+       Vertical supports
+    */
+
+    createBlock(
+        tx - 70,
+        groundY - 125,
         30,
+        90,
+        "stone"
+    );
+
+    createBlock(
+        tx + 70,
+        groundY - 125,
+        30,
+        90,
+        "stone"
+    );
+
+
+    /*
+       Upper platform
+    */
+
+    createBlock(
+        tx,
+        groundY - 175,
+        170,
+        26,
         "wood"
     );
 
 
-    // pig
+    /*
+       PIGS
+
+       Two targets so there is
+       something obvious to shoot.
+    */
 
     createPig(
-        baseX,
-        container.clientHeight - 190
+        tx,
+        groundY - 105,
+        21
+    );
+
+    createPig(
+        tx,
+        groundY - 205,
+        19
     );
 
 
-    // extra blocks
+    /*
+       Little roof
+    */
 
     createBlock(
-        baseX - 80,
-        container.clientHeight - 210,
-        35,
-        100,
-        "stone"
+        tx,
+        groundY - 235,
+        115,
+        24,
+        "wood"
     );
 
-    createBlock(
-        baseX + 80,
-        container.clientHeight - 210,
-        35,
-        100,
-        "stone"
-    );
 
+    /*
+       Bird
+    */
 
     createBird();
+
 
     updateBirdDisplay();
 }
 
 
-/* =========================================
-   CLEAR LEVEL
-========================================= */
+/* =====================================
+   CLEAR
+===================================== */
 
 function clearLevel() {
 
@@ -460,21 +513,115 @@ function clearLevel() {
 
     targetObjects = [];
 
-    birdBodies = [];
-
     dragging = false;
 
     launched = false;
 }
 
 
-/* =========================================
-   BIRD COUNT
-========================================= */
+/* =====================================
+   CREATE BIRD
+===================================== */
+
+function createBird() {
+
+    if (
+        birdsLeft <= 0
+    ) {
+        return;
+    }
+
+
+    const bird =
+        Bodies.circle(
+
+            getSlingX(),
+
+            getSlingY(),
+
+            18,
+
+            {
+                isStatic: true,
+
+                restitution: 0.35,
+
+                friction: 0.5,
+
+                density: 0.002,
+
+                label: "bird",
+
+                render: {
+
+                    fillStyle:
+                        "#d94335",
+
+                    strokeStyle:
+                        "#68251f",
+
+                    lineWidth: 2
+                }
+            }
+        );
+
+
+    currentBird =
+        bird;
+
+
+    Composite.add(
+        world,
+        bird
+    );
+
+
+    sling =
+        Constraint.create({
+
+            pointA: {
+
+                x:
+                    getSlingX(),
+
+                y:
+                    getSlingY()
+            },
+
+            bodyB:
+                bird,
+
+            stiffness:
+                0.08,
+
+            damping:
+                0.02,
+
+            length:
+                0,
+
+            render: {
+
+                visible:
+                    false
+            }
+        });
+
+
+    Composite.add(
+        world,
+        sling
+    );
+}
+
+
+/* =====================================
+   BIRD DISPLAY
+===================================== */
 
 function updateBirdDisplay() {
 
-    let result = "";
+    let text = "";
 
     for (
         let i = 0;
@@ -482,18 +629,19 @@ function updateBirdDisplay() {
         i++
     ) {
 
-        result += "● ";
-
+        text +=
+            "● ";
     }
 
+
     birdCountElement.textContent =
-        result || "—";
+        text || "—";
 }
 
 
-/* =========================================
+/* =====================================
    SCORE
-========================================= */
+===================================== */
 
 function addScore(points) {
 
@@ -504,14 +652,15 @@ function addScore(points) {
 }
 
 
-/* =========================================
-   POINTER POSITION
-========================================= */
+/* =====================================
+   POINTER
+===================================== */
 
-function pointerPosition(event) {
+function getPointer(event) {
 
     const rect =
         canvas.getBoundingClientRect();
+
 
     return {
 
@@ -526,9 +675,9 @@ function pointerPosition(event) {
 }
 
 
-/* =========================================
+/* =====================================
    DRAG START
-========================================= */
+===================================== */
 
 canvas.addEventListener(
     "pointerdown",
@@ -542,26 +691,35 @@ canvas.addEventListener(
             return;
         }
 
+
         const point =
-            pointerPosition(event);
+            getPointer(event);
+
 
         const distance =
             Vector.magnitude(
+
                 Vector.sub(
                     point,
                     currentBird.position
                 )
             );
 
-        if (distance > 55) {
+
+        if (
+            distance > 55
+        ) {
             return;
         }
 
+
         dragging = true;
+
 
         canvas.setPointerCapture(
             event.pointerId
         );
+
 
         powerElement.classList.add(
             "visible"
@@ -570,9 +728,9 @@ canvas.addEventListener(
 );
 
 
-/* =========================================
-   DRAG MOVE
-========================================= */
+/* =====================================
+   DRAG
+===================================== */
 
 canvas.addEventListener(
     "pointermove",
@@ -585,22 +743,28 @@ canvas.addEventListener(
             return;
         }
 
+
         const point =
-            pointerPosition(event);
+            getPointer(event);
 
 
-        /*
-           Keep bird close to sling.
-        */
+        const sx =
+            getSlingX();
+
+        const sy =
+            getSlingY();
+
 
         let dx =
-            point.x - slingX;
+            point.x - sx;
 
         let dy =
-            point.y - slingY;
+            point.y - sy;
 
 
-        const maxDistance = 95;
+        const max =
+            105;
+
 
         const distance =
             Math.sqrt(
@@ -609,11 +773,12 @@ canvas.addEventListener(
             );
 
 
-        if (distance > maxDistance) {
+        if (
+            distance > max
+        ) {
 
             const ratio =
-                maxDistance /
-                distance;
+                max / distance;
 
             dx *= ratio;
             dy *= ratio;
@@ -621,40 +786,45 @@ canvas.addEventListener(
 
 
         /*
-           Don't allow bird to be pulled
-           too far forward.
+           Bird cannot be pulled
+           in front of the sling.
         */
 
-        if (dx > 20) {
-            dx = 20;
+        if (
+            dx > 15
+        ) {
+
+            dx = 15;
         }
 
 
         Body.setPosition(
             currentBird,
             {
-                x: slingX + dx,
-                y: slingY + dy
+
+                x:
+                    sx + dx,
+
+                y:
+                    sy + dy
             }
         );
 
 
-        /*
-           Power indicator
-        */
-
         const power =
             Math.min(
                 100,
+
                 Math.round(
                     Math.sqrt(
                         dx * dx +
                         dy * dy
                     ) /
-                    maxDistance *
+                    max *
                     100
                 )
             );
+
 
         powerFill.style.width =
             power + "%";
@@ -662,9 +832,9 @@ canvas.addEventListener(
 );
 
 
-/* =========================================
+/* =====================================
    RELEASE
-========================================= */
+===================================== */
 
 canvas.addEventListener(
     "pointerup",
@@ -677,35 +847,33 @@ canvas.addEventListener(
             return;
         }
 
+
         dragging = false;
+
 
         powerElement.classList.remove(
             "visible"
         );
 
+
         powerFill.style.width =
             "0%";
 
 
-        const birdPosition =
-            currentBird.position;
+        const sx =
+            getSlingX();
 
+        const sy =
+            getSlingY();
 
-        /*
-           Launch vector is opposite
-           to the pulling direction.
-        */
 
         const dx =
-            slingX -
-            birdPosition.x;
+            sx -
+            currentBird.position.x;
 
         const dy =
-            slingY -
-            birdPosition.y;
-
-
-        const multiplier = 0.13;
+            sy -
+            currentBird.position.y;
 
 
         Body.setStatic(
@@ -717,22 +885,23 @@ canvas.addEventListener(
         Body.setVelocity(
             currentBird,
             {
-                x: dx * multiplier,
-                y: dy * multiplier
+
+                x:
+                    dx * 0.13,
+
+                y:
+                    dy * 0.13
             }
         );
 
 
         launched = true;
 
+
         birdsLeft--;
 
         updateBirdDisplay();
 
-
-        /*
-           Release sling.
-        */
 
         if (sling) {
 
@@ -745,27 +914,26 @@ canvas.addEventListener(
         }
 
 
-        /*
-           Wait before creating next bird.
-        */
-
         setTimeout(
-            checkBirdFinished,
-            2500
+            checkBird,
+            2200
         );
     }
 );
 
 
-/* =========================================
+/* =====================================
    CHECK BIRD
-========================================= */
+===================================== */
 
-function checkBirdFinished() {
+function checkBird() {
 
-    if (!currentBird) {
+    if (
+        !currentBird
+    ) {
         return;
     }
+
 
     const speed =
         Vector.magnitude(
@@ -773,31 +941,36 @@ function checkBirdFinished() {
         );
 
 
-    /*
-       If bird is almost stationary,
-       prepare next one.
-    */
+    const offscreen =
+        currentBird.position.y >
+            H() + 250;
+
 
     if (
-        speed < 1.2 ||
-        currentBird.position.y >
-            container.clientHeight + 200
+        speed < 1.1 ||
+        offscreen
     ) {
 
         if (
             targetObjects.length === 0
         ) {
-            finishLevel(true);
+
+            finishLevel(
+                true
+            );
 
             return;
         }
 
 
-        if (birdsLeft > 0) {
+        if (
+            birdsLeft > 0
+        ) {
 
             currentBird = null;
 
             launched = false;
+
 
             setTimeout(
                 createBird,
@@ -806,36 +979,43 @@ function checkBirdFinished() {
 
         } else {
 
-            finishLevel(false);
+            finishLevel(
+                false
+            );
         }
 
     } else {
 
         setTimeout(
-            checkBirdFinished,
-            1000
+            checkBird,
+            800
         );
     }
 }
 
 
-/* =========================================
+/* =====================================
    COLLISIONS
-========================================= */
+===================================== */
 
 Events.on(
     engine,
     "collisionStart",
     event => {
 
-        event.pairs.forEach(pair => {
+        for (
+            const pair of event.pairs
+        ) {
 
-            const a = pair.bodyA;
-            const b = pair.bodyB;
+            const a =
+                pair.bodyA;
+
+            const b =
+                pair.bodyB;
 
 
             /*
-               Pig collision
+               PIG
             */
 
             if (
@@ -860,12 +1040,15 @@ Events.on(
                     );
 
 
-                if (impact > 4) {
+                if (
+                    impact > 3.5
+                ) {
 
                     Composite.remove(
                         world,
                         pig
                     );
+
 
                     targetObjects =
                         targetObjects.filter(
@@ -873,13 +1056,16 @@ Events.on(
                                 item !== pig
                         );
 
-                    addScore(500);
+
+                    addScore(
+                        500
+                    );
                 }
             }
 
 
             /*
-               Block impact
+               BLOCK
             */
 
             if (
@@ -904,12 +1090,15 @@ Events.on(
                     );
 
 
-                if (impact > 7) {
+                if (
+                    impact > 6
+                ) {
 
                     Composite.remove(
                         world,
                         block
                     );
+
 
                     levelObjects =
                         levelObjects.filter(
@@ -917,35 +1106,44 @@ Events.on(
                                 item !== block
                         );
 
-                    addScore(100);
+
+                    addScore(
+                        100
+                    );
                 }
             }
-
-        });
+        }
     }
 );
 
 
-/* =========================================
-   LEVEL COMPLETE
-========================================= */
+/* =====================================
+   COMPLETE
+===================================== */
 
-function finishLevel(success) {
+function finishLevel(
+    success
+) {
 
-    if (levelComplete) {
+    if (
+        levelComplete
+    ) {
         return;
     }
+
 
     levelComplete = true;
 
 
-    if (success) {
+    if (
+        success
+    ) {
 
         messageTitle.textContent =
             "LEVEL COMPLETE";
 
         messageText.textContent =
-            "You cleared the structure.";
+            "All targets destroyed.";
 
         nextBtn.textContent =
             "NEXT LEVEL";
@@ -969,9 +1167,9 @@ function finishLevel(success) {
 }
 
 
-/* =========================================
-   NEXT LEVEL
-========================================= */
+/* =====================================
+   NEXT
+===================================== */
 
 nextBtn.addEventListener(
     "click",
@@ -985,7 +1183,7 @@ nextBtn.addEventListener(
 
             birdsLeft =
                 Math.min(
-                    3 + level - 1,
+                    3 + level,
                     5
                 );
 
@@ -995,21 +1193,21 @@ nextBtn.addEventListener(
                 "hidden"
             );
 
-            createLevel();
+            buildLevel();
 
         } else {
 
-            restartLevel();
+            restart();
         }
     }
 );
 
 
-/* =========================================
+/* =====================================
    RESTART
-========================================= */
+===================================== */
 
-function restartLevel() {
+function restart() {
 
     score = 0;
 
@@ -1024,18 +1222,19 @@ function restartLevel() {
         "hidden"
     );
 
-    createLevel();
+    buildLevel();
 }
+
 
 restartBtn.addEventListener(
     "click",
-    restartLevel
+    restart
 );
 
 
-/* =========================================
+/* =====================================
    HELP
-========================================= */
+===================================== */
 
 helpBtn.addEventListener(
     "click",
@@ -1045,6 +1244,7 @@ helpBtn.addEventListener(
             "flex";
     }
 );
+
 
 closeHelp.addEventListener(
     "click",
@@ -1056,55 +1256,31 @@ closeHelp.addEventListener(
 );
 
 
-/* =========================================
+/* =====================================
    HOME
-========================================= */
+===================================== */
 
 homeBtn.addEventListener(
     "click",
     () => {
 
+        /*
+           angry-birds is:
+           /games/angry-birds/
+
+           Homepage is:
+           /
+        */
+
         window.location.href =
-            "../index.html";
+            "../../index.html";
     }
 );
 
 
-/* =========================================
-   CAMERA
-========================================= */
-
-Events.on(
-    render,
-    "beforeRender",
-    () => {
-
-        if (
-            !currentBird ||
-            !launched
-        ) {
-            return;
-        }
-
-
-        const targetX =
-            Math.max(
-                0,
-                currentBird.position.x -
-                container.clientWidth * 0.35
-            );
-
-
-        cameraX +=
-            (targetX - cameraX) *
-            0.05;
-    }
-);
-
-
-/* =========================================
-   DRAW CUSTOM GRAPHICS
-========================================= */
+/* =====================================
+   CUSTOM DRAWING
+===================================== */
 
 Events.on(
     render,
@@ -1114,35 +1290,40 @@ Events.on(
         const ctx =
             render.context;
 
+
         ctx.save();
 
 
+        const sx =
+            getSlingX();
+
+        const sy =
+            getSlingY();
+
+
         /*
-           Draw slingshot
+           Slingshot
         */
 
-        const x = slingX;
-        const y = slingY;
-
-
         ctx.strokeStyle =
-            "#593b25";
+            "#563924";
 
         ctx.lineWidth = 9;
 
-        ctx.lineCap = "round";
+        ctx.lineCap =
+            "round";
 
 
         ctx.beginPath();
 
         ctx.moveTo(
-            x - 12,
-            y + 45
+            sx - 12,
+            sy + 45
         );
 
         ctx.lineTo(
-            x - 9,
-            y
+            sx - 9,
+            sy
         );
 
         ctx.stroke();
@@ -1151,13 +1332,13 @@ Events.on(
         ctx.beginPath();
 
         ctx.moveTo(
-            x + 12,
-            y + 45
+            sx + 12,
+            sy + 45
         );
 
         ctx.lineTo(
-            x + 9,
-            y
+            sx + 9,
+            sy
         );
 
         ctx.stroke();
@@ -1180,7 +1361,7 @@ Events.on(
 
 
             ctx.strokeStyle =
-                "#3b2920";
+                "#39261d";
 
             ctx.lineWidth = 4;
 
@@ -1188,8 +1369,8 @@ Events.on(
             ctx.beginPath();
 
             ctx.moveTo(
-                x - 9,
-                y
+                sx - 9,
+                sy
             );
 
             ctx.lineTo(
@@ -1203,8 +1384,8 @@ Events.on(
             ctx.beginPath();
 
             ctx.moveTo(
-                x + 9,
-                y
+                sx + 9,
+                sy
             );
 
             ctx.lineTo(
@@ -1217,126 +1398,18 @@ Events.on(
 
 
         /*
-           Bird eyes
+           Bird face
         */
 
-        if (currentBird) {
+        if (
+            currentBird
+        ) {
 
-            const bx =
-                currentBird.position.x;
-
-            const by =
-                currentBird.position.y;
-
-            ctx.fillStyle =
-                "white";
-
-            ctx.beginPath();
-
-            ctx.arc(
-                bx - 6,
-                by - 4,
-                5,
-                0,
-                Math.PI * 2
+            drawBird(
+                ctx,
+                currentBird.position.x,
+                currentBird.position.y
             );
-
-            ctx.arc(
-                bx + 6,
-                by - 4,
-                5,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-
-            ctx.fillStyle =
-                "#111";
-
-            ctx.beginPath();
-
-            ctx.arc(
-                bx - 5,
-                by - 4,
-                2,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.arc(
-                bx + 7,
-                by - 4,
-                2,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-
-            /*
-               Angry eyebrows
-            */
-
-            ctx.strokeStyle =
-                "#3b1715";
-
-            ctx.lineWidth = 3;
-
-            ctx.beginPath();
-
-            ctx.moveTo(
-                bx - 12,
-                by - 11
-            );
-
-            ctx.lineTo(
-                bx - 3,
-                by - 8
-            );
-
-            ctx.moveTo(
-                bx + 3,
-                by - 8
-            );
-
-            ctx.lineTo(
-                bx + 12,
-                by - 11
-            );
-
-            ctx.stroke();
-
-
-            /*
-               Beak
-            */
-
-            ctx.fillStyle =
-                "#e3a329";
-
-            ctx.beginPath();
-
-            ctx.moveTo(
-                bx,
-                by + 1
-            );
-
-            ctx.lineTo(
-                bx + 15,
-                by + 5
-            );
-
-            ctx.lineTo(
-                bx,
-                by + 10
-            );
-
-            ctx.closePath();
-
-            ctx.fill();
         }
 
 
@@ -1344,112 +1417,16 @@ Events.on(
            Pig faces
         */
 
-        targetObjects.forEach(
-            pig => {
+        for (
+            const pig of targetObjects
+        ) {
 
-                const px =
-                    pig.position.x;
-
-                const py =
-                    pig.position.y;
-
-
-                ctx.fillStyle =
-                    "white";
-
-
-                ctx.beginPath();
-
-                ctx.arc(
-                    px - 6,
-                    py - 4,
-                    4,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.arc(
-                    px + 6,
-                    py - 4,
-                    4,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.fill();
-
-
-                ctx.fillStyle =
-                    "#172b16";
-
-
-                ctx.beginPath();
-
-                ctx.arc(
-                    px - 6,
-                    py - 4,
-                    1.5,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.arc(
-                    px + 6,
-                    py - 4,
-                    1.5,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.fill();
-
-
-                /*
-                   Pig nose
-                */
-
-                ctx.fillStyle =
-                    "#6eae5d";
-
-                ctx.beginPath();
-
-                ctx.ellipse(
-                    px,
-                    py + 6,
-                    8,
-                    5,
-                    0,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.fill();
-
-
-                ctx.fillStyle =
-                    "#3f7138";
-
-                ctx.beginPath();
-
-                ctx.arc(
-                    px - 3,
-                    py + 6,
-                    1.5,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.arc(
-                    px + 3,
-                    py + 6,
-                    1.5,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.fill();
-            }
-        );
+            drawPig(
+                ctx,
+                pig.position.x,
+                pig.position.y
+            );
+        }
 
 
         ctx.restore();
@@ -1457,13 +1434,229 @@ Events.on(
 );
 
 
-/* =========================================
+/* =====================================
+   BIRD GRAPHICS
+===================================== */
+
+function drawBird(
+    ctx,
+    x,
+    y
+) {
+
+    ctx.fillStyle =
+        "white";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x - 6,
+        y - 4,
+        5,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.arc(
+        x + 6,
+        y - 4,
+        5,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#111";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x - 5,
+        y - 4,
+        2,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.arc(
+        x + 7,
+        y - 4,
+        2,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Eyebrows
+    */
+
+    ctx.strokeStyle =
+        "#3b1715";
+
+    ctx.lineWidth = 3;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x - 12,
+        y - 11
+    );
+
+    ctx.lineTo(
+        x - 3,
+        y - 8
+    );
+
+    ctx.moveTo(
+        x + 3,
+        y - 8
+    );
+
+    ctx.lineTo(
+        x + 12,
+        y - 11
+    );
+
+    ctx.stroke();
+
+
+    /*
+       Beak
+    */
+
+    ctx.fillStyle =
+        "#e3a329";
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x,
+        y + 1
+    );
+
+    ctx.lineTo(
+        x + 15,
+        y + 5
+    );
+
+    ctx.lineTo(
+        x,
+        y + 10
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+}
+
+
+/* =====================================
+   PIG GRAPHICS
+===================================== */
+
+function drawPig(
+    ctx,
+    x,
+    y
+) {
+
+    ctx.fillStyle =
+        "white";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x - 6,
+        y - 4,
+        4,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.arc(
+        x + 6,
+        y - 4,
+        4,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#172b16";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x - 6,
+        y - 4,
+        1.5,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.arc(
+        x + 6,
+        y - 4,
+        1.5,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Nose
+    */
+
+    ctx.fillStyle =
+        "#69a957";
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        x,
+        y + 6,
+        8,
+        5,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+}
+
+
+/* =====================================
    RESIZE
-========================================= */
+===================================== */
 
 window.addEventListener(
     "resize",
     () => {
+
+        render.options.width =
+            container.clientWidth;
+
+        render.options.height =
+            container.clientHeight;
 
         render.canvas.width =
             container.clientWidth *
@@ -1478,20 +1671,12 @@ window.addEventListener(
                 window.devicePixelRatio || 1,
                 2
             );
-
-        render.options.width =
-            container.clientWidth;
-
-        render.options.height =
-            container.clientHeight;
-
-        updateSlingshotPosition();
     }
 );
 
 
-/* =========================================
+/* =====================================
    START
-========================================= */
+===================================== */
 
-createLevel();
+buildLevel();
